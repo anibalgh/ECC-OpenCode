@@ -6,7 +6,7 @@ description: "Run a full multi-model development workflow with research, plannin
 
 Multi-model collaborative development workflow (Research → Ideation → Plan → Execute → Optimize → Review), with intelligent routing: Frontend → Antigravity, Backend → Codex.
 
-> **Prerequisite:** Requires the external `ccg-workflow` runtime, which is **not** part of the base ECC install. Initialize it with `npx ccg-workflow` to provision `~/.claude/bin/codeagent-wrapper` and the `~/.claude/.ccg/prompts/*` role files this command depends on. Without that runtime, this command will not run correctly.
+> **Prerequisite:** Requires the external `ccg-workflow` runtime, which is **not** part of the base ECC install. Initialize it with `npx ccg-workflow` to provision `~/.opencode/bin/codeagent-wrapper` and the `~/.opencode/.ccg/prompts/*` role files this command depends on. Without that runtime, this command will not run correctly.
 
 Structured development workflow with quality gates, MCP services, and multi-model collaboration.
 
@@ -20,7 +20,7 @@ Structured development workflow with quality gates, MCP services, and multi-mode
 
 - Task to develop: $ARGUMENTS
 - Structured 6-phase workflow with quality gates
-- Multi-model collaboration: Codex (backend) + Antigravity (frontend) + Claude (orchestration)
+- Multi-model collaboration: Codex (backend) + Antigravity (frontend) + OpenCode (orchestration)
 - MCP service integration (ace-tool, optional) for enhanced capabilities
 
 ## Your Role
@@ -31,7 +31,7 @@ You are the **Orchestrator**, coordinating a multi-model collaborative system (R
 - **ace-tool MCP** (optional) – Code retrieval + Prompt enhancement
 - **Codex** – Backend logic, algorithms, debugging (**Backend authority, trustworthy**)
 - **Antigravity** – Frontend UI/UX, visual design (**Frontend expert, backend opinions for reference only**)
-- **Claude (self)** – Orchestration, planning, execution, delivery
+- **OpenCode (self)** – Orchestration, planning, execution, delivery
 
 ---
 
@@ -42,7 +42,7 @@ You are the **Orchestrator**, coordinating a multi-model collaborative system (R
 ```
 # New session call
 Bash({
-  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> - \"$PWD\" <<'EOF'
+  command: "~/.opencode/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> - \"$PWD\" <<'EOF'
 ROLE_FILE: <role prompt path>
 <TASK>
 Requirement: <enhanced requirement (or $ARGUMENTS if not enhanced)>
@@ -57,7 +57,7 @@ EOF",
 
 # Resume session call
 Bash({
-  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> resume <SESSION_ID> - \"$PWD\" <<'EOF'
+  command: "~/.opencode/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> resume <SESSION_ID> - \"$PWD\" <<'EOF'
 ROLE_FILE: <role prompt path>
 <TASK>
 Requirement: <enhanced requirement (or $ARGUMENTS if not enhanced)>
@@ -78,9 +78,9 @@ EOF",
 
 | Phase | Codex | Antigravity |
 |-------|-------|--------|
-| Analysis | `~/.claude/.ccg/prompts/codex/analyzer.md` | `~/.claude/.ccg/prompts/antigravity/analyzer.md` |
-| Planning | `~/.claude/.ccg/prompts/codex/architect.md` | `~/.claude/.ccg/prompts/antigravity/architect.md` |
-| Review | `~/.claude/.ccg/prompts/codex/reviewer.md` | `~/.claude/.ccg/prompts/antigravity/reviewer.md` |
+| Analysis | `~/.opencode/.ccg/prompts/codex/analyzer.md` | `~/.opencode/.ccg/prompts/antigravity/analyzer.md` |
+| Planning | `~/.opencode/.ccg/prompts/codex/architect.md` | `~/.opencode/.ccg/prompts/antigravity/architect.md` |
+| Review | `~/.opencode/.ccg/prompts/codex/reviewer.md` | `~/.opencode/.ccg/prompts/antigravity/reviewer.md` |
 
 **Session Reuse**: Each call returns `SESSION_ID: xxx`, use `resume xxx` subcommand for subsequent phases (note: `resume`, not `--resume`).
 
@@ -112,7 +112,7 @@ TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 Use external tmux/worktree orchestration when the work must be split across parallel workers that need isolated git state, independent terminals, or separate build/test execution. Use in-process subagents for lightweight analysis, planning, or review where the main session remains the only writer.
 
 ```bash
-node scripts/orchestrate-worktrees.js .claude/plan/workflow-e2e-test.json --execute
+node scripts/orchestrate-worktrees.js .opencode/plans/workflow-e2e-test.json --execute
 ```
 
 ---
@@ -157,7 +157,7 @@ Wait for results with `TaskOutput`.
 
 **Follow the `IMPORTANT` instructions in `Multi-Model Call Specification` above**
 
-**Claude Synthesis**: Adopt Codex backend plan + Antigravity frontend plan, save to `.claude/plan/task-name.md` after user approval.
+**OpenCode Synthesis**: Adopt Codex backend plan + Antigravity frontend plan, save to `.opencode/plans/task-name.md` after user approval.
 
 ### Phase 4: Implementation
 
@@ -193,5 +193,5 @@ Wait for results with `TaskOutput`. Integrate review feedback, execute optimizat
 ## Key Rules
 
 1. Phase sequence cannot be skipped (unless user explicitly instructs)
-2. External models have **zero filesystem write access**, all modifications by Claude
+2. External models have **zero filesystem write access**, all modifications by OpenCode
 3. **Force stop** when score < 7 or user does not approve

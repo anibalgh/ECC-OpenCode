@@ -1,12 +1,12 @@
 ---
-description: "Execute a multi-model implementation plan while preserving Claude as the only filesystem writer."
+description: "Execute a multi-model implementation plan while preserving OpenCode as the only filesystem writer."
 ---
 
 # Execute - Multi-Model Collaborative Execution
 
-Multi-model collaborative execution - Get prototype from plan → Claude refactors and implements → Multi-model audit and delivery.
+Multi-model collaborative execution - Get prototype from plan → OpenCode refactors and implements → Multi-model audit and delivery.
 
-> **Prerequisite:** Requires the external `ccg-workflow` runtime, which is **not** part of the base ECC install. Initialize it with `npx ccg-workflow` to provision `~/.claude/bin/codeagent-wrapper` and the `~/.claude/.ccg/prompts/*` role files this command depends on. Without that runtime, this command will not run correctly.
+> **Prerequisite:** Requires the external `ccg-workflow` runtime, which is **not** part of the base ECC install. Initialize it with `npx ccg-workflow` to provision `~/.opencode/bin/codeagent-wrapper` and the `~/.opencode/.ccg/prompts/*` role files this command depends on. Without that runtime, this command will not run correctly.
 
 $ARGUMENTS
 
@@ -15,7 +15,7 @@ $ARGUMENTS
 ## Core Protocols
 
 - **Language Protocol**: Use **English** when interacting with tools/models, communicate with user in their language
-- **Code Sovereignty**: External models have **zero filesystem write access**, all modifications by Claude
+- **Code Sovereignty**: External models have **zero filesystem write access**, all modifications by OpenCode
 - **Dirty Prototype Refactoring**: Treat Codex/Antigravity Unified Diff as "dirty prototype", must refactor to production-grade code
 - **Stop-Loss Mechanism**: Do not proceed to next phase until current phase output is validated
 - **Prerequisite**: Only execute after user explicitly replies "Y" to `/ccg:plan` output (if missing, must confirm first)
@@ -29,7 +29,7 @@ $ARGUMENTS
 ```
 # Resume session call (recommended) - Implementation Prototype
 Bash({
-  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> resume <SESSION_ID> - \"$PWD\" <<'EOF'
+  command: "~/.opencode/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> resume <SESSION_ID> - \"$PWD\" <<'EOF'
 ROLE_FILE: <role prompt path>
 <TASK>
 Requirement: <task description>
@@ -44,7 +44,7 @@ EOF",
 
 # New session call - Implementation Prototype
 Bash({
-  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> - \"$PWD\" <<'EOF'
+  command: "~/.opencode/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> - \"$PWD\" <<'EOF'
 ROLE_FILE: <role prompt path>
 <TASK>
 Requirement: <task description>
@@ -62,7 +62,7 @@ EOF",
 
 ```
 Bash({
-  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> resume <SESSION_ID> - \"$PWD\" <<'EOF'
+  command: "~/.opencode/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> resume <SESSION_ID> - \"$PWD\" <<'EOF'
 ROLE_FILE: <role prompt path>
 <TASK>
 Scope: Audit the final code changes.
@@ -90,8 +90,8 @@ EOF",
 
 | Phase | Codex | Antigravity |
 |-------|-------|--------|
-| Implementation | `~/.claude/.ccg/prompts/codex/architect.md` | `~/.claude/.ccg/prompts/antigravity/frontend.md` |
-| Review | `~/.claude/.ccg/prompts/codex/reviewer.md` | `~/.claude/.ccg/prompts/antigravity/reviewer.md` |
+| Implementation | `~/.opencode/.ccg/prompts/codex/architect.md` | `~/.opencode/.ccg/prompts/antigravity/frontend.md` |
+| Review | `~/.opencode/.ccg/prompts/codex/reviewer.md` | `~/.opencode/.ccg/prompts/antigravity/reviewer.md` |
 
 **Session Reuse**: If `/ccg:plan` provided SESSION_ID, use `resume <SESSION_ID>` to reuse context.
 
@@ -117,7 +117,7 @@ TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 `[Mode: Prepare]`
 
 1. **Identify Input Type**:
-   - Plan file path (e.g., `.claude/plan/xxx.md`)
+   - Plan file path (e.g., `.opencode/plans/xxx.md`)
    - Direct task description
 
 2. **Read Plan Content**:
@@ -158,7 +158,7 @@ mcp__ace-tool__search_context({
 - Build semantic query covering: entry files, dependency modules, related type definitions
 - If results insufficient, add 1-2 recursive retrievals
 
-**If ace-tool MCP is NOT available**, use Claude Code built-in tools as fallback:
+**If ace-tool MCP is NOT available**, use OpenCode built-in tools as fallback:
 1. **Glob**: Find target files from plan's "Key Files" table (e.g., `Glob("src/components/**/*.tsx")`)
 2. **Grep**: Search for key symbols, function names, type definitions across the codebase
 3. **Read**: Read the discovered files to gather complete context
@@ -181,7 +181,7 @@ mcp__ace-tool__search_context({
 
 **Limit**: Context < 32k tokens
 
-1. Call Antigravity (use `~/.claude/.ccg/prompts/antigravity/frontend.md`)
+1. Call Antigravity (use `~/.opencode/.ccg/prompts/antigravity/frontend.md`)
 2. Input: Plan content + retrieved context + target files
 3. OUTPUT: `Unified Diff Patch ONLY. Strictly prohibit any actual modifications.`
 4. **Antigravity is frontend design authority, its CSS/React/Vue prototype is the final visual baseline**
@@ -190,7 +190,7 @@ mcp__ace-tool__search_context({
 
 #### Route B: Backend/Logic/Algorithms → Codex
 
-1. Call Codex (use `~/.claude/.ccg/prompts/codex/architect.md`)
+1. Call Codex (use `~/.opencode/.ccg/prompts/codex/architect.md`)
 2. Input: Plan content + retrieved context + target files
 3. OUTPUT: `Unified Diff Patch ONLY. Strictly prohibit any actual modifications.`
 4. **Codex is backend logic authority, leverage its logical reasoning and debug capabilities**
@@ -212,7 +212,7 @@ mcp__ace-tool__search_context({
 
 `[Mode: Implement]`
 
-**Claude as Code Sovereign executes the following steps**:
+**OpenCode as Primary Agent executes the following steps**:
 
 1. **Read Diff**: Parse Unified Diff Patch returned by Codex/Antigravity
 
@@ -251,12 +251,12 @@ mcp__ace-tool__search_context({
 **After changes take effect, MUST immediately parallel call** Codex and Antigravity for Code Review:
 
 1. **Codex Review** (`run_in_background: true`):
-   - ROLE_FILE: `~/.claude/.ccg/prompts/codex/reviewer.md`
+   - ROLE_FILE: `~/.opencode/.ccg/prompts/codex/reviewer.md`
    - Input: Changed Diff + target files
    - Focus: Security, performance, error handling, logic correctness
 
 2. **Antigravity Review** (`run_in_background: true`):
-   - ROLE_FILE: `~/.claude/.ccg/prompts/antigravity/reviewer.md`
+   - ROLE_FILE: `~/.opencode/.ccg/prompts/antigravity/reviewer.md`
    - Input: Changed Diff + target files
    - Focus: Accessibility, design consistency, user experience
 
@@ -294,7 +294,7 @@ After audit passes, report to user:
 
 ## Key Rules
 
-1. **Code Sovereignty** – All file modifications by Claude, external models have zero write access
+1. **Code Sovereignty** – All file modifications by OpenCode, external models have zero write access
 2. **Dirty Prototype Refactoring** – Codex/Antigravity output treated as draft, must refactor
 3. **Trust Rules** – Backend follows Codex, Frontend follows Antigravity
 4. **Minimal Changes** – Only modify necessary code, no side effects
@@ -306,7 +306,7 @@ After audit passes, report to user:
 
 ```bash
 # Execute plan file
-/ccg:execute .claude/plan/feature-name.md
+/ccg:execute .opencode/plans/feature-name.md
 
 # Execute task directly (for plans already discussed in context)
 /ccg:execute implement user authentication based on previous plan

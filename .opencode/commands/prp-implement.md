@@ -210,10 +210,10 @@ Run through edge cases from the plan's Testing Strategy checklist.
 ### Create Implementation Report
 
 ```bash
-mkdir -p .claude/PRPs/reports
+mkdir -p .opencode/PRPs/reports
 ```
 
-Write report to `.claude/PRPs/reports/{plan-name}-report.md`:
+Write report to `.opencode/PRPs/reports/{plan-name}-report.md`:
 
 ```markdown
 # Implementation Report: [Feature Name]
@@ -279,8 +279,8 @@ If this implementation was for a PRD phase:
 ### Archive Plan
 
 ```bash
-mkdir -p .claude/PRPs/plans/completed
-mv "$ARGUMENTS" .claude/PRPs/plans/completed/
+mkdir -p .opencode/PRPs/plans/completed
+mv "$ARGUMENTS" .opencode/PRPs/plans/completed/
 ```
 
 **CHECKPOINT**: Report created. PRD updated. Plan archived.
@@ -315,8 +315,8 @@ Report to user:
 [Summary or "None — implemented exactly as planned"]
 
 ### Artifacts
-- Report: `.claude/PRPs/reports/{name}-report.md`
-- Archived Plan: `.claude/PRPs/plans/completed/{name}.plan.md`
+- Report: `.opencode/PRPs/reports/{name}-report.md`
+- Archived Plan: `.opencode/PRPs/plans/completed/{name}.plan.md`
 
 ### PRD Progress (if applicable)
 | Phase | Status |

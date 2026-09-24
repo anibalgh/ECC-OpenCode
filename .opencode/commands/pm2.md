@@ -40,7 +40,7 @@ Auto-analyze project and generate PM2 service commands.
 project/
 ├── ecosystem.config.cjs              # PM2 config
 ├── {backend}/start.cjs               # Python wrapper (if applicable)
-└── .claude/
+└── .opencode/
     ├── commands/
     │   ├── pm2-all.md                # Start all + monit
     │   ├── pm2-all-stop.md           # Stop all
@@ -206,8 +206,8 @@ Based on `$ARGUMENTS`, execute init:
 1. Scan project for services
 2. Generate `ecosystem.config.cjs`
 3. Generate `{backend}/start.cjs` for Python services (if applicable)
-4. Generate command files in `.claude/commands/`
-5. Generate script files in `.claude/scripts/`
+4. Generate command files in `.opencode/commands/`
+5. Generate script files in `.opencode/scripts/`
 6. **Update project AGENTS.md** with PM2 info (see below)
 7. **Display completion summary** with terminal commands
 
@@ -256,7 +256,7 @@ After all files generated, output:
 |------|------|------|
 | {port} | {name} | {type} |
 
-**Claude Commands:** /pm2-all, /pm2-all-stop, /pm2-{port}, /pm2-{port}-stop, /pm2-logs, /pm2-status
+**OpenCode Commands:** /pm2-all, /pm2-all-stop, /pm2-{port}, /pm2-{port}-stop, /pm2-logs, /pm2-status
 
 **Terminal Commands:**
 ## First time (with config file)

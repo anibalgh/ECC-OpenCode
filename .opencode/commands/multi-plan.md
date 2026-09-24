@@ -6,7 +6,7 @@ description: "Create a multi-model implementation plan without modifying product
 
 Multi-model collaborative planning - Context retrieval + Dual-model analysis → Generate step-by-step implementation plan.
 
-> **Prerequisite:** Requires the external `ccg-workflow` runtime, which is **not** part of the base ECC install. Initialize it with `npx ccg-workflow` to provision `~/.claude/bin/codeagent-wrapper` and the `~/.claude/.ccg/prompts/*` role files this command depends on. Without that runtime, this command will not run correctly.
+> **Prerequisite:** Requires the external `ccg-workflow` runtime, which is **not** part of the base ECC install. Initialize it with `npx ccg-workflow` to provision `~/.opencode/bin/codeagent-wrapper` and the `~/.opencode/.ccg/prompts/*` role files this command depends on. Without that runtime, this command will not run correctly.
 
 $ARGUMENTS
 
@@ -16,9 +16,9 @@ $ARGUMENTS
 
 - **Language Protocol**: Use **English** when interacting with tools/models, communicate with user in their language
 - **Mandatory Parallel**: Codex/Antigravity calls MUST use `run_in_background: true` (including single model calls, to avoid blocking main thread)
-- **Code Sovereignty**: External models have **zero filesystem write access**, all modifications by Claude
+- **Code Sovereignty**: External models have **zero filesystem write access**, all modifications by OpenCode
 - **Stop-Loss Mechanism**: Do not proceed to next phase until current phase output is validated
-- **Planning Only**: This command allows reading context and writing to `.claude/plan/*` plan files, but **NEVER modify production code**
+- **Planning Only**: This command allows reading context and writing to `.opencode/plans/*` plan files, but **NEVER modify production code**
 
 ---
 
@@ -28,7 +28,7 @@ $ARGUMENTS
 
 ```
 Bash({
-  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> - \"$PWD\" <<'EOF'
+  command: "~/.opencode/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|antigravity> - \"$PWD\" <<'EOF'
 ROLE_FILE: <role prompt path>
 <TASK>
 Requirement: <enhanced requirement>
@@ -49,8 +49,8 @@ EOF",
 
 | Phase | Codex | Antigravity |
 |-------|-------|--------|
-| Analysis | `~/.claude/.ccg/prompts/codex/analyzer.md` | `~/.claude/.ccg/prompts/antigravity/analyzer.md` |
-| Planning | `~/.claude/.ccg/prompts/codex/architect.md` | `~/.claude/.ccg/prompts/antigravity/architect.md` |
+| Analysis | `~/.opencode/.ccg/prompts/codex/analyzer.md` | `~/.opencode/.ccg/prompts/antigravity/analyzer.md` |
+| Planning | `~/.opencode/.ccg/prompts/codex/architect.md` | `~/.opencode/.ccg/prompts/antigravity/architect.md` |
 
 **Session Reuse**: Each call returns `SESSION_ID: xxx` (typically output by wrapper), **MUST save** for subsequent `/ccg:execute` use.
 
@@ -105,7 +105,7 @@ mcp__ace-tool__search_context({
 - Build semantic query using natural language (Where/What/How)
 - **NEVER answer based on assumptions**
 
-**If ace-tool MCP is NOT available**, use Claude Code built-in tools as fallback:
+**If ace-tool MCP is NOT available**, use OpenCode built-in tools as fallback:
 1. **Glob**: Find relevant files by pattern (e.g., `Glob("**/*.ts")`, `Glob("src/**/*.py")`)
 2. **Grep**: Search for key symbols, function names, class definitions (e.g., `Grep("className|functionName")`)
 3. **Read**: Read the discovered files to gather complete context
@@ -133,12 +133,12 @@ mcp__ace-tool__search_context({
 Distribute **original requirement** (without preset opinions) to both models:
 
 1. **Codex Backend Analysis**:
-   - ROLE_FILE: `~/.claude/.ccg/prompts/codex/analyzer.md`
+   - ROLE_FILE: `~/.opencode/.ccg/prompts/codex/analyzer.md`
    - Focus: Technical feasibility, architecture impact, performance considerations, potential risks
    - OUTPUT: Multi-perspective solutions + pros/cons analysis
 
 2. **Antigravity Frontend Analysis**:
-   - ROLE_FILE: `~/.claude/.ccg/prompts/antigravity/analyzer.md`
+   - ROLE_FILE: `~/.opencode/.ccg/prompts/antigravity/analyzer.md`
    - Focus: UI/UX impact, user experience, visual design
    - OUTPUT: Multi-perspective solutions + pros/cons analysis
 
@@ -155,19 +155,19 @@ Integrate perspectives and iterate for optimization:
 
 #### 2.3 (Optional but Recommended) Dual-Model Plan Draft
 
-To reduce risk of omissions in Claude's synthesized plan, can parallel have both models output "plan drafts" (still **NOT allowed** to modify files):
+To reduce risk of omissions in OpenCode's synthesized plan, can parallel have both models output "plan drafts" (still **NOT allowed** to modify files):
 
 1. **Codex Plan Draft** (Backend authority):
-   - ROLE_FILE: `~/.claude/.ccg/prompts/codex/architect.md`
+   - ROLE_FILE: `~/.opencode/.ccg/prompts/codex/architect.md`
    - OUTPUT: Step-by-step plan + pseudo-code (focus: data flow/edge cases/error handling/test strategy)
 
 2. **Antigravity Plan Draft** (Frontend authority):
-   - ROLE_FILE: `~/.claude/.ccg/prompts/antigravity/architect.md`
+   - ROLE_FILE: `~/.opencode/.ccg/prompts/antigravity/architect.md`
    - OUTPUT: Step-by-step plan + pseudo-code (focus: information architecture/interaction/accessibility/visual consistency)
 
 Wait for both models' complete results with `TaskOutput`, record key differences in their suggestions.
 
-#### 2.4 Generate Implementation Plan (Claude Final Version)
+#### 2.4 Generate Implementation Plan (OpenCode Final Version)
 
 Synthesize both analyses, generate **Step-by-step Implementation Plan**:
 
@@ -206,18 +206,18 @@ Synthesize both analyses, generate **Step-by-step Implementation Plan**:
 **`/ccg:plan` responsibilities end here, MUST execute the following actions**:
 
 1. Present complete implementation plan to user (including pseudo-code)
-2. Save plan to `.claude/plan/<feature-name>.md` (extract feature name from requirement, e.g., `user-auth`, `payment-module`)
+2. Save plan to `.opencode/plans/<feature-name>.md` (extract feature name from requirement, e.g., `user-auth`, `payment-module`)
 3. Output prompt in **bold text** (MUST use actual saved file path):
 
 ---
-**Plan generated and saved to `.claude/plan/actual-feature-name.md`**
+**Plan generated and saved to `.opencode/plans/actual-feature-name.md`**
 
 **Please review the plan above. You can:**
 - **Modify plan**: Tell me what needs adjustment, I'll update the plan
 - **Execute plan**: Copy the following command to a new session
 
 ```
-/ccg:execute .claude/plan/actual-feature-name.md
+/ccg:execute .opencode/plans/actual-feature-name.md
 ```
 ---
 
@@ -237,8 +237,8 @@ Synthesize both analyses, generate **Step-by-step Implementation Plan**:
 
 After planning completes, save plan to:
 
-- **First planning**: `.claude/plan/<feature-name>.md`
-- **Iteration versions**: `.claude/plan/<feature-name>-v2.md`, `.claude/plan/<feature-name>-v3.md`...
+- **First planning**: `.opencode/plans/<feature-name>.md`
+- **Iteration versions**: `.opencode/plans/<feature-name>-v2.md`, `.opencode/plans/<feature-name>-v3.md`...
 
 Plan file write should complete before presenting plan to user.
 
@@ -249,7 +249,7 @@ Plan file write should complete before presenting plan to user.
 If user requests plan modifications:
 
 1. Adjust plan content based on user feedback
-2. Update `.claude/plan/<feature-name>.md` file
+2. Update `.opencode/plans/<feature-name>.md` file
 3. Re-present modified plan
 4. Prompt user to review or execute again
 
@@ -260,7 +260,7 @@ If user requests plan modifications:
 After user approves, **manually** execute:
 
 ```bash
-/ccg:execute .claude/plan/<feature-name>.md
+/ccg:execute .opencode/plans/<feature-name>.md
 ```
 
 ---
