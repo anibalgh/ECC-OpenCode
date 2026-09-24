@@ -58,9 +58,9 @@ function getECCVersion(): string {
   try {
     const packageJsonPath = path.resolve(__dirname, "../../package.json")
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"))
-    return packageJson.version || "2.0.0"
+    return packageJson.version || "1.0.0"
   } catch {
-    return "2.0.0"
+    return "1.0.0"
   }
 }
 
@@ -541,10 +541,10 @@ export const ECCHooksPlugin: ECCHooksPluginFn = async ({
       const contextBlock = [
         "# ECC Context (preserve across compaction)",
         "",
-        "## Active Plugin: ECC v2.2.2",
+        "## Active Plugin: ECC-OpenCode v1.0.0",
         "- Hooks: file.edited, tool.execute.before/after, session.created/idle/deleted, shell.env, compacting, permission.ask",
-        "- Tools: run-tests, check-coverage, security-audit, format-code, lint-check, git-summary, changed-files",
-        "- Agents: 13 specialized (planner, architect, tdd-guide, code-reviewer, security-reviewer, build-error-resolver, e2e-runner, refactor-cleaner, doc-updater, go-reviewer, go-build-resolver, database-reviewer, python-reviewer)",
+        "- Tools: run-tests, check-coverage, security-audit, format-code, lint-check, git-summary, changed-files, dependency-analyzer",
+        "- Agents: 68 specialized subagents (planner, architect, tdd-guide, code-reviewer, security-reviewer, build-error-resolver, e2e-runner, refactor-cleaner, doc-updater, python-reviewer, go-reviewer, rust-reviewer, etc.)",
         "",
         "## Key Principles",
         "- TDD: write tests first, 80%+ coverage",

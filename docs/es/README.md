@@ -1,46 +1,60 @@
 **Idioma:** [English](../../README.md) | [Português (Brasil)](../pt-BR/README.md) | [简体中文](../../README.zh-CN.md) | [繁體中文](../zh-TW/README.md) | [日本語](../ja-JP/README.md) | [한국어](../ko-KR/README.md) | [Türkçe](../tr/README.md) | [Русский](../ru/README.md) | [Tiếng Việt](../vi-VN/README.md) | [ไทย](../th/README.md) | [Deutsch](../de-DE/README.md) | **Español** | [Українська](../uk-UA/README.md)
 
-# ECC
+# ECC-OpenCode (v1.0.0)
 
-![ECC - el sistema operativo nativo del harness para trabajo agentivo](../../assets/hero.png)
+![ECC-OpenCode - Sistema operativo agentivo para OpenCode](../../assets/hero.png)
 
-[![Estrellas de GitHub](https://img.shields.io/github/stars/affaan-m/ECC?style=flat)](https://github.com/affaan-m/ECC)
-[![Forks de GitHub](https://img.shields.io/github/forks/affaan-m/ECC?style=flat)](https://github.com/affaan-m/ECC/forks)
-[![Contributors](https://img.shields.io/github/contributors/affaan-m/ECC?style=flat)](https://github.com/affaan-m/ECC/graphs/contributors)
-[![npm ecc-universal](https://img.shields.io/npm/dw/ecc-universal?label=ecc-universal%20weekly%20downloads&logo=npm)](https://www.npmjs.com/package/ecc-universal)
-[![npm ecc-agentshield](https://img.shields.io/npm/dw/ecc-agentshield?label=ecc-agentshield%20weekly%20downloads&logo=npm)](https://www.npmjs.com/package/ecc-agentshield)
-[![GitHub App Install](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Finstalls&logo=github)](https://github.com/marketplace/ecc-tools)
+[![Versión](https://img.shields.io/badge/Versi%C3%B3n-1.0.0-blue.svg)](../../VERSION)
+[![Harness](https://img.shields.io/badge/Harness-OpenCode-black?logo=terminal&logoColor=white)](https://opencode.ai)
+[![Runtime](https://img.shields.io/badge/Runtime-Bun%201.4+-fbf0df?logo=bun&logoColor=black)](https://bun.sh)
+[![Subagentes](https://img.shields.io/badge/Subagentes-68-green.svg)](../../.opencode/agents/)
+[![Comandos](https://img.shields.io/badge/Comandos-100-purple.svg)](../../.opencode/commands/)
+[![Skills](https://img.shields.io/badge/Skills-292-orange.svg)](../../skills/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
-![Shell](https://img.shields.io/badge/-Shell-4EAA25?logo=gnu-bash&logoColor=white)
-![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?logo=typescript&logoColor=white)
-![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white)
-![Go](https://img.shields.io/badge/-Go-00ADD8?logo=go&logoColor=white)
-![Java](https://img.shields.io/badge/-Java-ED8B00?logo=openjdk&logoColor=white)
-![Perl](https://img.shields.io/badge/-Perl-39457E?logo=perl&logoColor=white)
-![Markdown](https://img.shields.io/badge/-Markdown-000000?logo=markdown&logoColor=white)
-
-> **182K+ estrellas** | **28K+ forks** | **170+ contribuidores** | **12+ ecosistemas de lenguajes** | **Flujos de trabajo de agentes multi-harness**
 
 ---
 
-<div align="center">
+> **ECC-OpenCode v1.0.0**: Sistema operativo de codificación con IA listo para producción, **especializado y optimizado para OpenCode** y ejecutado sobre el runtime ultrarrápido **Bun**.
 
-**Language / 语言 / 語言 / Dil / Язык / Ngôn ngữ / Idioma**
-
-[**English**](../../README.md) | [Português (Brasil)](../pt-BR/README.md) | [简体中文](../../README.zh-CN.md) | [繁體中文](../zh-TW/README.md) | [日本語](../ja-JP/README.md) | [한국어](../ko-KR/README.md)
- | [Türkçe](../tr/README.md) | [Русский](../ru/README.md) | [Tiếng Việt](../vi-VN/README.md) | [ไทย](../th/README.md) | [Deutsch](../de-DE/README.md) | **Español** | [Українська](../uk-UA/README.md)
-
-</div>
+Incluye:
+- **68 subagentes especializados** (`.opencode/agents/`)
+- **100 comandos slash** (`.opencode/commands/`)
+- **292 skills de ingeniería** (`skills/`)
+- **Hooks de eventos automáticos** (`.opencode/plugins/`)
+- **8 herramientas nativas** (`changed-files`, `dependency-analyzer`, `run-tests`, `check-coverage`, etc.)
 
 ---
 
-**El sistema operativo nativo del harness para trabajo agentivo. Construido a partir de flujos de trabajo de ingeniería multi-harness del mundo real.**
+## Instalación y Uso Rápido
 
-No son solo configuraciones. Es un sistema completo: skills, instintos, optimización de memoria, aprendizaje continuo, análisis de seguridad y desarrollo orientado a la investigación. Agentes listos para producción, skills, hooks, reglas, configuraciones de MCP y comandos legados, evolucionados durante más de 10 meses de uso diario intensivo construyendo productos reales.
+### Requisitos Previos
+1. **Bun** (v1.1+ o v1.4+ recomendado):
+   ```bash
+   curl -fsSL https://bun.sh/install | bash
+   ```
+2. **OpenCode CLI** (v1.18+ o v2.x):
+   ```bash
+   bun install -g --trust @opencode/cli
+   ```
 
-Funciona en **Codex**, **Claude Code**, **Cursor**, **OpenCode**, **Gemini**, **Zed**, **GitHub Copilot** y otros harnesses de agentes de IA.
+### Pasos de Instalación
+```bash
+# 1. Clonar el repositorio
+git clone git@github.com:anibalgh/ECC-OpenCode.git
+cd ECC-OpenCode
 
-ECC v2.0.0-rc.1 añade la historia pública del operador Hermes sobre esa capa reutilizable: comienza con la [guía de configuración de Hermes](../HERMES-SETUP.md), luego revisa las [notas de la versión rc.1](../releases/2.0.0-rc.1/release-notes.md) y la [arquitectura multi-harness](../architecture/cross-harness.md).
+# 2. Instalar dependencias con Bun
+bun install
+
+# 3. Compilar el plugin de OpenCode
+bun run build:opencode
+
+# 4. Iniciar OpenCode
+opencode
+```
+
+> [!NOTE]
+> ¿Deseas integrar ECC-OpenCode en otro proyecto ya existente? Consulta la guía paso a paso en [INSTALACION.md](../../INSTALACION.md).
 
 ---
 

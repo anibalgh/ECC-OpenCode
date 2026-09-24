@@ -1,6 +1,6 @@
 # Commands Quick Reference
 
-> 94 slash commands installed globally. Type `/` in any Claude Code session to invoke.
+> 100 slash commands available natively in OpenCode. Type `/` in any OpenCode session to invoke.
 
 ---
 

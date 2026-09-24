@@ -1,7 +1,7 @@
 ---
 description: Fix Rust build errors and borrow checker issues
 agent: rust-build-resolver
-subtask: true
+subagent: true
 ---
 
 # Rust Build Command

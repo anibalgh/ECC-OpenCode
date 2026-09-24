@@ -13,10 +13,10 @@ fs.rmSync(distDir, { recursive: true, force: true })
 let tscEntrypoint
 
 try {
-  tscEntrypoint = require.resolve("typescript/bin/tsc", { paths: [rootDir] })
+  tscEntrypoint = require.resolve("typescript/bin/tsc", { paths: [rootDir, opencodeDir] })
 } catch {
   throw new Error(
-    "TypeScript compiler not found. Install root dev dependencies before publishing so .opencode/dist can be built."
+    "TypeScript compiler not found. Install dev dependencies in root or .opencode before building so .opencode/dist can be built."
   )
 }
 

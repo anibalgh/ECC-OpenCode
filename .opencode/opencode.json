@@ -3,449 +3,793 @@
   "default_agent": "build",
   "instructions": [
     "AGENTS.md",
-    "CONTRIBUTING.md",
-    "instructions/INSTRUCTIONS.md",
-    "skills/tdd-workflow/SKILL.md",
-    "skills/security-review/SKILL.md",
-    "skills/coding-standards/SKILL.md",
-    "skills/frontend-patterns/SKILL.md",
-    "skills/frontend-slides/SKILL.md",
-    "skills/backend-patterns/SKILL.md",
-    "skills/e2e-testing/SKILL.md",
-    "skills/verification-loop/SKILL.md",
-    "skills/api-design/SKILL.md",
-    "skills/strategic-compact/SKILL.md",
-    "skills/eval-harness/SKILL.md"
+    "instructions/INSTRUCTIONS.md"
   ],
   "plugin": [
     "./plugins"
   ],
   "skills": {
     "paths": [
-      "../skills"
+      "../skills",
+      "../.agents/skills"
     ]
   },
   "agent": {
     "build": {
       "description": "Primary coding agent for development work",
       "mode": "primary",
+      "permission": {
+        "read": "allow",
+        "edit": "allow",
+        "bash": "allow"
+      },
       "tools": {
-        "write": true,
-        "edit": true,
-        "bash": true,
-        "read": true,
-        "changed-files": true
+        "changed-files": true,
+        "dependency-analyzer": true
       }
+    },
+    "gan-generator": {
+      "description": "GAN Harness — Generator agent. Implements features according to the spec, reads evaluator feedback, and iterates until quality threshold is met.",
+      "mode": "subagent"
+    },
+    "code-explorer": {
+      "description": "Deeply analyzes existing codebase features by tracing execution paths, mapping architecture layers, and documenting dependencies to inform new development.",
+      "mode": "subagent"
+    },
+    "opensource-forker": {
+      "description": "Fork any project for open-sourcing. Copies files, strips secrets and credentials (20+ patterns), replaces internal references with placeholders, generates .env.example, and cleans git history. First stage of the opensource-pipeline skill.",
+      "mode": "subagent"
     },
     "planner": {
-      "description": "Expert planning specialist for complex features and refactoring. Use for implementation planning, architectural changes, or complex refactoring.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/planner.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": false,
-        "edit": false
-      }
+      "description": "Expert planning specialist for complex features and refactoring. Use PROACTIVELY when users request feature implementation, architectural changes, or complex refactoring. Automatically activated for planning tasks.",
+      "mode": "subagent"
     },
-    "architect": {
-      "description": "Software architecture specialist for system design, scalability, and technical decision-making.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/architect.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": false,
-        "edit": false
-      }
+    "code-architect": {
+      "description": "Designs feature architectures by analyzing existing codebase patterns and conventions, then providing implementation blueprints with concrete files, interfaces, data flow, and build order.",
+      "mode": "subagent"
     },
-    "code-reviewer": {
-      "description": "Expert code review specialist. Reviews code for quality, security, and maintainability. Use immediately after writing or modifying code.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/code-reviewer.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": false,
-        "edit": false
-      }
+    "opensource-sanitizer": {
+      "description": "Verify an open-source fork is fully sanitized before release. Scans for leaked secrets, PII, internal references, and dangerous files using 20+ regex patterns. Generates a PASS/FAIL/PASS-WITH-WARNINGS report. Second stage of the opensource-pipeline skill. Use PROACTIVELY before any public release.",
+      "mode": "subagent"
+    },
+    "rust-build-resolver": {
+      "description": "Rust build, compilation, and dependency error resolution specialist. Fixes cargo build errors, borrow checker issues, and Cargo.toml problems with minimal changes. Use when Rust builds fail.",
+      "mode": "subagent"
+    },
+    "python-reviewer": {
+      "description": "Expert Python code reviewer specializing in PEP 8 compliance, Pythonic idioms, type hints, security, and performance. Use for all Python code changes. MUST BE USED for Python projects.",
+      "mode": "subagent"
+    },
+    "a11y-architect": {
+      "description": "Accessibility Architect specializing in WCAG 2.2 compliance for Web and Native platforms. Use PROACTIVELY when designing UI components, establishing design systems, or auditing code for inclusive user experiences.",
+      "mode": "subagent"
+    },
+    "spec-miner": {
+      "description": "Extracts behavioral specs from existing codebases for OpenSpec. Produces flat Requirement and Invariant blocks with structured metadata (entities, enforced, id, test anchors). Outputs openspec/specs/<capability>/spec.md. Fully self-bootstrapping — no dependency on codebase-onboarding. Use when onboarding a brownfield project to spec-driven development.",
+      "mode": "subagent"
+    },
+    "type-design-analyzer": {
+      "description": "Analyze type design for encapsulation, invariant expression, usefulness, and enforcement.",
+      "mode": "subagent"
     },
     "security-reviewer": {
-      "description": "Security vulnerability detection and remediation specialist. Use after writing code that handles user input, authentication, API endpoints, or sensitive data.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/security-reviewer.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": true,
-        "edit": true
-      }
-    },
-    "tdd-guide": {
-      "description": "Test-Driven Development specialist enforcing write-tests-first methodology. Use when writing new features, fixing bugs, or refactoring code. Ensures 80%+ test coverage.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/tdd-guide.txt}",
-      "tools": {
-        "read": true,
-        "write": true,
-        "edit": true,
-        "bash": true
-      }
-    },
-    "build-error-resolver": {
-      "description": "Build and TypeScript error resolution specialist. Use when build fails or type errors occur. Fixes build/type errors only with minimal diffs.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/build-error-resolver.txt}",
-      "tools": {
-        "read": true,
-        "write": true,
-        "edit": true,
-        "bash": true
-      }
-    },
-    "e2e-runner": {
-      "description": "End-to-end testing specialist using Playwright. Generates, maintains, and runs E2E tests for critical user flows.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/e2e-runner.txt}",
-      "tools": {
-        "read": true,
-        "write": true,
-        "edit": true,
-        "bash": true
-      }
-    },
-    "doc-updater": {
-      "description": "Documentation and codemap specialist. Use for updating codemaps and documentation.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/doc-updater.txt}",
-      "tools": {
-        "read": true,
-        "write": true,
-        "edit": true,
-        "bash": true
-      }
-    },
-    "refactor-cleaner": {
-      "description": "Dead code cleanup and consolidation specialist. Use for removing unused code, duplicates, and refactoring.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/refactor-cleaner.txt}",
-      "tools": {
-        "read": true,
-        "write": true,
-        "edit": true,
-        "bash": true
-      }
-    },
-    "go-reviewer": {
-      "description": "Expert Go code reviewer specializing in idiomatic Go, concurrency patterns, error handling, and performance.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/go-reviewer.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": false,
-        "edit": false
-      }
-    },
-    "go-build-resolver": {
-      "description": "Go build, vet, and compilation error resolution specialist. Fixes Go build errors with minimal changes.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/go-build-resolver.txt}",
-      "tools": {
-        "read": true,
-        "write": true,
-        "edit": true,
-        "bash": true
-      }
-    },
-    "database-reviewer": {
-      "description": "PostgreSQL database specialist for query optimization, schema design, security, and performance. Incorporates Supabase best practices.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/database-reviewer.txt}",
-      "tools": {
-        "read": true,
-        "write": true,
-        "edit": true,
-        "bash": true
-      }
+      "description": "Security vulnerability detection and remediation specialist. Use PROACTIVELY after writing code that handles user input, authentication, API endpoints, or sensitive data. Flags secrets, SSRF, injection, unsafe crypto, and OWASP Top 10 vulnerabilities.",
+      "mode": "subagent"
     },
     "cpp-reviewer": {
-      "description": "Expert C++ code reviewer specializing in memory safety, modern C++ idioms, concurrency, and performance. Use for all C++ code changes.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/cpp-reviewer.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": false,
-        "edit": false
-      }
+      "description": "Expert C++ code reviewer specializing in memory safety, modern C++ idioms, concurrency, and performance. Use for all C++ code changes. MUST BE USED for C++ projects.",
+      "mode": "subagent"
     },
-    "cpp-build-resolver": {
-      "description": "C++ build, CMake, and compilation error resolution specialist. Fixes build errors, linker issues, and template errors with minimal changes.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/cpp-build-resolver.txt}",
-      "tools": {
-        "read": true,
-        "write": true,
-        "edit": true,
-        "bash": true
-      }
+    "react-build-resolver": {
+      "description": "Diagnose and fix React build failures across Vite, webpack, Next.js, CRA, Parcel, esbuild, and Bun. Handles JSX/TSX compile errors, hydration mismatches, server/client component boundary failures, missing types, and bundler-specific configuration issues with minimal, surgical changes. MUST BE USED when a React build fails.",
+      "mode": "subagent"
+    },
+    "php-reviewer": {
+      "description": "Expert PHP code reviewer specializing in PSR-12 compliance, PHP type system, Eloquent ORM patterns, security, and performance. Use for all PHP code changes. MUST BE USED for PHP projects.",
+      "mode": "subagent"
+    },
+    "conversation-analyzer": {
+      "description": "Use this agent when analyzing conversation transcripts to find behaviors worth preventing with hooks. Triggered by /hookify without arguments.",
+      "mode": "subagent"
+    },
+    "refactor-cleaner": {
+      "description": "Dead code cleanup and consolidation specialist. Use PROACTIVELY for removing unused code, duplicates, and refactoring. Runs analysis tools (knip, depcheck, ts-prune) to identify dead code and safely removes it.",
+      "mode": "subagent"
+    },
+    "rust-reviewer": {
+      "description": "Expert Rust code reviewer specializing in ownership, lifetimes, error handling, unsafe usage, and idiomatic patterns. Use for all Rust code changes. MUST BE USED for Rust projects.",
+      "mode": "subagent"
+    },
+    "doc-updater": {
+      "description": "Documentation and codemap specialist. Use PROACTIVELY for updating codemaps and documentation. Generates docs/CODEMAPS/*, updates READMEs and guides. Backs the /update-codemaps and /update-docs commands.",
+      "mode": "subagent"
     },
     "docs-lookup": {
-      "description": "Documentation specialist using Context7 MCP to fetch current library and API documentation with code examples.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/docs-lookup.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": false,
-        "edit": false
-      }
+      "description": "When the user asks how to use a library, framework, or API or needs up-to-date code examples, use Context7 MCP to fetch current documentation and return answers with examples. Invoke for docs/API/setup questions.",
+      "mode": "subagent"
     },
-    "harness-optimizer": {
-      "description": "Analyze and improve the local agent harness configuration for reliability, cost, and throughput.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/harness-optimizer.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "edit": true
-      }
+    "comment-analyzer": {
+      "description": "Analyze code comments for accuracy, completeness, maintainability, and comment rot risk.",
+      "mode": "subagent"
+    },
+    "silent-failure-hunter": {
+      "description": "Review code for silent failures, swallowed errors, bad fallbacks, and missing error propagation.",
+      "mode": "subagent"
+    },
+    "rag-pipeline-reviewer": {
+      "description": "Reviews RAG (Retrieval-Augmented Generation) pipelines for retrieval quality, chunking strategy, embedding choices, and evaluation coverage. Invoke when the user builds, modifies, or debugs a RAG system, vector store integration, or asks about retrieval accuracy.",
+      "mode": "subagent"
     },
     "java-reviewer": {
-      "description": "Expert Java and Spring Boot code reviewer specializing in layered architecture, JPA patterns, security, and concurrency.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/java-reviewer.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": false,
-        "edit": false
-      }
+      "description": "Expert Java code reviewer for Spring Boot and Quarkus projects. Automatically detects the framework and applies the appropriate review rules. Covers layered architecture, JPA/Panache, MongoDB, security, and concurrency. MUST BE USED for all Java code changes.",
+      "mode": "subagent"
     },
-    "java-build-resolver": {
-      "description": "Java/Maven/Gradle build, compilation, and dependency error resolution specialist. Fixes build errors with minimal changes.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/java-build-resolver.txt}",
-      "tools": {
-        "read": true,
-        "write": true,
-        "edit": true,
-        "bash": true
-      }
+    "fsharp-reviewer": {
+      "description": "Expert F# code reviewer specializing in functional idioms, type safety, pattern matching, computation expressions, and performance. Use for all F# code changes. MUST BE USED for F# projects.",
+      "mode": "subagent"
+    },
+    "flutter-reviewer": {
+      "description": "Flutter and Dart code reviewer. Reviews Flutter code for widget best practices, state management patterns, Dart idioms, performance pitfalls, accessibility, and clean architecture violations. Library-agnostic — works with any state management solution and tooling.",
+      "mode": "subagent"
+    },
+    "django-build-resolver": {
+      "description": "Django/Python build, migration, and dependency error resolution specialist. Fixes pip/Poetry errors, migration conflicts, import errors, Django configuration issues, and collectstatic failures with minimal changes. Use when Django setup or startup fails.",
+      "mode": "subagent"
+    },
+    "marketing-agent": {
+      "description": "Marketing strategist and copywriter for campaign planning, audience research, positioning, copy creation, and content review. Covers landing pages, email sequences, social posts, ad copy, short-form video scripts, and content calendars. Use when the user wants to plan or execute a product launch or marketing campaign.",
+      "mode": "subagent"
+    },
+    "database-reviewer": {
+      "description": "PostgreSQL database specialist for query optimization, schema design, security, and performance. Use PROACTIVELY when writing SQL, creating migrations, designing schemas, or troubleshooting database performance. Incorporates Supabase best practices.",
+      "mode": "subagent"
+    },
+    "swift-reviewer": {
+      "description": "Expert Swift code reviewer specializing in protocol-oriented design, value semantics, ARC memory management, Swift Concurrency, and idiomatic patterns. Use for all Swift code changes. MUST BE USED for Swift projects.",
+      "mode": "subagent"
+    },
+    "go-reviewer": {
+      "description": "Expert Go code reviewer specializing in idiomatic Go, concurrency patterns, error handling, and performance. Use for all Go code changes. MUST BE USED for Go projects.",
+      "mode": "subagent"
+    },
+    "cpp-build-resolver": {
+      "description": "C++ build, CMake, and compilation error resolution specialist. Fixes build errors, linker issues, and template errors with minimal changes. Use when C++ builds fail.",
+      "mode": "subagent"
+    },
+    "fastapi-reviewer": {
+      "description": "Reviews FastAPI applications for async correctness, dependency injection, Pydantic schemas, security, OpenAPI quality, testing, and production readiness.",
+      "mode": "subagent"
+    },
+    "opensource-packager": {
+      "description": "Generate complete open-source packaging for a sanitized project. Produces CLAUDE.md, setup.sh, README.md, LICENSE, CONTRIBUTING.md, and GitHub issue templates. Makes any repo immediately usable with Claude Code. Third stage of the opensource-pipeline skill.",
+      "mode": "subagent"
+    },
+    "build-error-resolver": {
+      "description": "Build and TypeScript error resolution specialist. Use PROACTIVELY when build fails or type errors occur. Fixes build/type errors only with minimal diffs, no architectural edits. Focuses on getting the build green quickly.",
+      "mode": "subagent"
+    },
+    "csharp-reviewer": {
+      "description": "Expert C# code reviewer specializing in .NET conventions, async patterns, security, nullable reference types, and performance. Use for all C# code changes. MUST BE USED for C# projects.",
+      "mode": "subagent"
+    },
+    "seo-specialist": {
+      "description": "SEO specialist for technical SEO audits, on-page optimization, structured data, Core Web Vitals, and content/keyword mapping. Use for site audits, meta tag reviews, schema markup, sitemap and robots issues, and SEO remediation plans.",
+      "mode": "subagent"
+    },
+    "dart-build-resolver": {
+      "description": "Dart/Flutter build, analysis, and dependency error resolution specialist. Fixes `dart analyze` errors, Flutter compilation failures, pub dependency conflicts, and build_runner issues with minimal, surgical changes. Use when Dart/Flutter builds fail.",
+      "mode": "subagent"
     },
     "kotlin-reviewer": {
-      "description": "Kotlin and Android/KMP code reviewer. Reviews Kotlin code for idiomatic patterns, coroutine safety, Compose best practices.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/kotlin-reviewer.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": false,
-        "edit": false
-      }
+      "description": "Kotlin and Android/KMP code reviewer. Reviews Kotlin code for idiomatic patterns, coroutine safety, Compose best practices, clean architecture violations, and common Android pitfalls.",
+      "mode": "subagent"
+    },
+    "healthcare-reviewer": {
+      "description": "Reviews healthcare application code for clinical safety, CDSS accuracy, PHI compliance, and medical data integrity. Specialized for EMR/EHR, clinical decision support, and health information systems.",
+      "mode": "subagent"
+    },
+    "harmonyos-app-resolver": {
+      "description": "HarmonyOS application development expert specializing in ArkTS and ArkUI. Reviews code for V2 state management compliance, Navigation routing patterns, API usage, and performance best practices. Use for HarmonyOS/OpenHarmony projects.",
+      "mode": "subagent"
+    },
+    "agent-evaluator": {
+      "description": "Evaluates agent output against 5-axis quality rubric (accuracy, completeness, clarity, actionability, conciseness). Use after any non-trivial task when the user wants a quality assessment, or when the agent-self-evaluation skill is active. Produces structured scorecard with evidence and improvement suggestions.",
+      "mode": "subagent"
+    },
+    "gan-planner": {
+      "description": "GAN Harness — Planner agent. Expands a one-line prompt into a full product specification with features, sprints, evaluation criteria, and design direction.",
+      "mode": "subagent"
+    },
+    "vue-reviewer": {
+      "description": "Expert Vue.js code reviewer specializing in Composition API correctness, reactivity pitfalls, component architecture, template security, and Vue-specific performance. Use for any change touching .vue, .ts/.js files with Vue imports, or Vue ecosystem code (Pinia, Vue Router, Nuxt). MUST BE USED for Vue projects.",
+      "mode": "subagent"
+    },
+    "network-config-reviewer": {
+      "description": "Reviews router and switch configurations for security, correctness, stale references, risky change-window commands, and missing operational guardrails.",
+      "mode": "subagent"
+    },
+    "performance-optimizer": {
+      "description": "Performance analysis and optimization specialist. Use PROACTIVELY for identifying bottlenecks, optimizing slow code, reducing bundle sizes, and improving runtime performance. Profiling, memory leaks, render optimization, and algorithmic improvements.",
+      "mode": "subagent"
     },
     "kotlin-build-resolver": {
-      "description": "Kotlin/Gradle build, compilation, and dependency error resolution specialist. Fixes Kotlin build errors with minimal changes.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/kotlin-build-resolver.txt}",
-      "tools": {
-        "read": true,
-        "write": true,
-        "edit": true,
-        "bash": true
-      }
+      "description": "Kotlin/Gradle build, compilation, and dependency error resolution specialist. Fixes build errors, Kotlin compiler errors, and Gradle issues with minimal changes. Use when Kotlin builds fail.",
+      "mode": "subagent"
+    },
+    "tdd-guide": {
+      "description": "Test-Driven Development specialist enforcing write-tests-first methodology. Use PROACTIVELY when writing new features, fixing bugs, or refactoring code. Ensures 80%+ test coverage.",
+      "mode": "subagent"
+    },
+    "pr-test-analyzer": {
+      "description": "Review pull request test coverage quality and completeness, with emphasis on behavioral coverage and real bug prevention.",
+      "mode": "subagent"
+    },
+    "django-reviewer": {
+      "description": "Expert Django code reviewer specializing in ORM correctness, DRF patterns, migration safety, security misconfigurations, and production-grade Django practices. Use for all Django code changes. MUST BE USED for Django projects.",
+      "mode": "subagent"
+    },
+    "code-reviewer": {
+      "description": "Expert code review specialist. Proactively reviews code for quality, security, and maintainability. Use immediately after writing or modifying code. MUST BE USED for all code changes.",
+      "mode": "subagent"
+    },
+    "go-build-resolver": {
+      "description": "Go build, vet, and compilation error resolution specialist. Fixes build errors, go vet issues, and linter warnings with minimal changes. Use when Go builds fail.",
+      "mode": "subagent"
+    },
+    "mle-reviewer": {
+      "description": "Production machine-learning engineering reviewer for data contracts, feature pipelines, training reproducibility, offline/online evaluation, model serving, monitoring, and rollback. Use when ML, MLOps, model training, inference, feature store, or evaluation code changes.",
+      "mode": "subagent"
+    },
+    "react-reviewer": {
+      "description": "Expert React/JSX code reviewer specializing in hook correctness, render performance, server/client component boundaries, accessibility, and React-specific security. Use for any change touching .tsx/.jsx files or React component logic. MUST BE USED for React projects.",
+      "mode": "subagent"
+    },
+    "swift-build-resolver": {
+      "description": "Swift/Xcode build, compilation, and dependency error resolution specialist. Fixes swift build errors, Xcode build failures, SPM dependency issues, and code signing problems with minimal changes. Use when Swift builds fail.",
+      "mode": "subagent"
+    },
+    "e2e-runner": {
+      "description": "End-to-end testing specialist using Vercel Agent Browser (preferred) with Playwright fallback. Use PROACTIVELY for generating, maintaining, and running E2E tests. Manages test journeys, quarantines flaky tests, uploads artifacts (screenshots, videos, traces), and ensures critical user flows work.",
+      "mode": "subagent"
+    },
+    "chief-of-staff": {
+      "description": "Personal communication chief of staff that triages email, Slack, LINE, and Messenger. Classifies messages into 4 tiers (skip/info_only/meeting_info/action_required), generates draft replies, and enforces post-send follow-through via hooks. Use when managing multi-channel communication workflows.",
+      "mode": "subagent"
+    },
+    "harness-optimizer": {
+      "description": "Improve local agent-harness configuration reliability and cost using eval-driven grading (pass@k/pass^k) derived from the eval-harness skill.",
+      "mode": "subagent"
+    },
+    "gan-evaluator": {
+      "description": "GAN Harness — Evaluator agent. Tests the live running application via Playwright, scores against rubric, and provides actionable feedback to the Generator.",
+      "mode": "subagent"
+    },
+    "architect": {
+      "description": "Software architecture specialist for system design, scalability, and technical decision-making. Use PROACTIVELY when planning new features, refactoring large systems, or making architectural decisions.",
+      "mode": "subagent"
+    },
+    "network-troubleshooter": {
+      "description": "Diagnoses network connectivity, routing, DNS, interface, and policy symptoms with a read-only OSI-layer workflow and evidence-backed root cause summary.",
+      "mode": "subagent"
+    },
+    "pytorch-build-resolver": {
+      "description": "PyTorch runtime, CUDA, and training error resolution specialist. Fixes tensor shape mismatches, device errors, gradient issues, DataLoader problems, and mixed precision failures with minimal changes. Use when PyTorch training or inference crashes.",
+      "mode": "subagent"
+    },
+    "java-build-resolver": {
+      "description": "Java/Maven/Gradle build, compilation, and dependency error resolution specialist. Automatically detects Spring Boot or Quarkus and applies framework-specific fixes. Fixes build errors, Java compiler errors, and Maven/Gradle issues with minimal changes. Use when Java builds fail.",
+      "mode": "subagent"
+    },
+    "typescript-reviewer": {
+      "description": "Expert TypeScript/JavaScript code reviewer specializing in type safety, async correctness, Node/web security, and idiomatic patterns. Use for all TypeScript and JavaScript code changes. MUST BE USED for TypeScript/JavaScript projects.",
+      "mode": "subagent"
+    },
+    "homelab-architect": {
+      "description": "Designs home and small-lab network plans from hardware inventory, goals, and operator experience level, with safe staged changes and rollback guidance.",
+      "mode": "subagent"
+    },
+    "code-simplifier": {
+      "description": "Simplifies and refines code for clarity, consistency, and maintainability while preserving behavior. Focus on recently modified code unless instructed otherwise.",
+      "mode": "subagent"
     },
     "loop-operator": {
       "description": "Operate autonomous agent loops, monitor progress, and intervene safely when loops stall.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/loop-operator.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "edit": true
-      }
+      "mode": "subagent"
     },
-    "php-reviewer": {
-      "description": "Expert PHP code reviewer specializing in PSR-12 compliance, PHP type system, Eloquent ORM patterns, security, and performance.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/php-reviewer.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": false,
-        "edit": false
-      }
-    },
-    "python-reviewer": {
-      "description": "Expert Python code reviewer specializing in PEP 8 compliance, Pythonic idioms, type hints, security, and performance.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/python-reviewer.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": false,
-        "edit": false
-      }
-    },
-    "rust-reviewer": {
-      "description": "Expert Rust code reviewer specializing in idiomatic Rust, ownership, lifetimes, concurrency, and performance.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/rust-reviewer.txt}",
-      "tools": {
-        "read": true,
-        "bash": true,
-        "write": false,
-        "edit": false
-      }
-    },
-    "rust-build-resolver": {
-      "description": "Rust build, Cargo, and compilation error resolution specialist. Fixes Rust build errors with minimal changes.",
-      "mode": "subagent",
-      "prompt": "{file:prompts/agents/rust-build-resolver.txt}",
-      "tools": {
-        "read": true,
-        "write": true,
-        "edit": true,
-        "bash": true
-      }
+    "network-architect": {
+      "description": "Designs enterprise or multi-site network architecture from requirements, using existing network skills for focused routing, validation, automation, and troubleshooting detail.",
+      "mode": "subagent"
     }
   },
+  "permission": {
+    "mcp_*": "ask"
+  },
   "command": {
+    "harness-audit": {
+      "description": "Run a deterministic repository harness audit and return a prioritized scorecard.",
+      "template": "{file:commands/harness-audit.md}\n\n$ARGUMENTS",
+      "agent": "harness-optimizer",
+      "subagent": true
+    },
+    "epic-validate": {
+      "description": "Validate epic readiness, dependencies, and coordination policy.",
+      "template": "{file:commands/epic-validate.md}\n\n$ARGUMENTS"
+    },
+    "cpp-build": {
+      "description": "Fix C++ build errors, CMake issues, and linker problems incrementally. Invokes the cpp-build-resolver agent for minimal, surgical fixes.",
+      "template": "{file:commands/cpp-build.md}\n\n$ARGUMENTS",
+      "agent": "cpp-build-resolver",
+      "subagent": true
+    },
+    "model-route": {
+      "description": "Command model-route",
+      "template": "{file:commands/model-route.md}\n\n$ARGUMENTS"
+    },
+    "prp-pr": {
+      "description": "Alias of /pr for the PRP workflow series. Use when creating a pull request mid-PRP workflow; otherwise use /pr.",
+      "template": "{file:commands/prp-pr.md}\n\n$ARGUMENTS"
+    },
+    "epic-decompose": {
+      "description": "Break an epic into task children without creating task branches.",
+      "template": "{file:commands/epic-decompose.md}\n\n$ARGUMENTS"
+    },
+    "prp-prd": {
+      "description": "Interactive PRD generator - problem-first, hypothesis-driven product spec with back-and-forth questioning",
+      "template": "{file:commands/prp-prd.md}\n\n$ARGUMENTS"
+    },
+    "react-build": {
+      "description": "Fix React build failures (Vite, webpack, Next.js, CRA, Parcel, esbuild, Bun) incrementally — JSX/TSX compile errors, hydration mismatches, server/client component boundary failures, missing types. Invokes the react-build-resolver agent for minimal, surgical fixes.",
+      "template": "{file:commands/react-build.md}\n\n$ARGUMENTS",
+      "agent": "react-build-resolver",
+      "subagent": true
+    },
+    "save-session": {
+      "description": "Save current session state to a dated file in ~/.claude/session-data/ so work can be resumed in a future session with full context.",
+      "template": "{file:commands/save-session.md}\n\n$ARGUMENTS"
+    },
+    "skill-create": {
+      "description": "Generate skills from git history analysis",
+      "template": "{file:commands/skill-create.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "quality-gate": {
+      "description": "Command quality-gate",
+      "template": "{file:commands/quality-gate.md}\n\n$ARGUMENTS"
+    },
+    "flutter-build": {
+      "description": "Fix Dart analyzer errors and Flutter build failures incrementally. Invokes the dart-build-resolver agent for minimal, surgical fixes.",
+      "template": "{file:commands/flutter-build.md}\n\n$ARGUMENTS",
+      "agent": "dart-build-resolver",
+      "subagent": true
+    },
+    "test-coverage": {
+      "description": "Analyze and improve test coverage",
+      "template": "{file:commands/test-coverage.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subagent": true
+    },
+    "hookify-help": {
+      "description": "Get help with the hookify system",
+      "template": "{file:commands/hookify-help.md}\n\n$ARGUMENTS"
+    },
+    "epic-sync": {
+      "description": "Sync epic issue bodies, labels, and local coordination snapshots from GitHub.",
+      "template": "{file:commands/epic-sync.md}\n\n$ARGUMENTS"
+    },
+    "aside": {
+      "description": "Answer a quick side question without interrupting or losing context from the current task. Resume work automatically after answering.",
+      "template": "{file:commands/aside.md}\n\n$ARGUMENTS"
+    },
+    "vue-review": {
+      "description": "Comprehensive Vue.js code review for Composition API correctness, reactivity, composable patterns, template security, accessibility, and Vue-specific performance. Invokes the vue-reviewer agent (and typescript-reviewer alongside on .vue/.ts changes).",
+      "template": "{file:commands/vue-review.md}\n\n$ARGUMENTS",
+      "agent": "vue-reviewer",
+      "subagent": true
+    },
+    "learn-eval": {
+      "description": "Extract reusable patterns from the session, self-evaluate quality before saving, and determine the right save location (Global vs Project).",
+      "template": "{file:commands/learn-eval.md}\n\n$ARGUMENTS"
+    },
+    "sessions": {
+      "description": "Manage Claude Code session history, aliases, and session metadata.",
+      "template": "{file:commands/sessions.md}\n\n$ARGUMENTS"
+    },
+    "flutter-test": {
+      "description": "Run Flutter/Dart tests, report failures, and incrementally fix test issues. Covers unit, widget, golden, and integration tests.",
+      "template": "{file:commands/flutter-test.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subagent": true
+    },
+    "rust-build": {
+      "description": "Fix Rust build errors and borrow checker issues",
+      "template": "{file:commands/rust-build.md}\n\n$ARGUMENTS",
+      "agent": "rust-build-resolver",
+      "subagent": true
+    },
     "plan": {
-      "description": "Create a detailed implementation plan for complex features",
+      "description": "Create implementation plan with risk assessment",
       "template": "{file:commands/plan.md}\n\n$ARGUMENTS",
       "agent": "planner",
-      "subtask": true
+      "subagent": true
     },
-    "tdd": {
-      "description": "Enforce TDD workflow with 80%+ test coverage",
-      "template": "{file:commands/tdd.md}\n\n$ARGUMENTS",
+    "skill-health": {
+      "description": "Show skill portfolio health dashboard with charts and analytics",
+      "template": "{file:commands/skill-health.md}\n\n$ARGUMENTS"
+    },
+    "cost-report": {
+      "description": "Generate a local Claude Code cost report from the ECC cost-tracker metrics log.",
+      "template": "{file:commands/cost-report.md}\n\n$ARGUMENTS"
+    },
+    "react-test": {
+      "description": "Enforce TDD workflow for React. Write React Testing Library tests first (behavior-focused, accessibility-first), then implement components. Detects Vitest or Jest and verifies coverage targets.",
+      "template": "{file:commands/react-test.md}\n\n$ARGUMENTS",
       "agent": "tdd-guide",
-      "subtask": true
+      "subagent": true
     },
-    "code-review": {
-      "description": "Review code for quality, security, and maintainability",
-      "template": "{file:commands/code-review.md}\n\n$ARGUMENTS",
-      "agent": "code-reviewer",
-      "subtask": true
+    "go-test": {
+      "description": "Go TDD workflow with table-driven tests",
+      "template": "{file:commands/go-test.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subagent": true
     },
-    "security": {
-      "description": "Run comprehensive security review",
-      "template": "{file:commands/security.md}\n\n$ARGUMENTS",
-      "agent": "security-reviewer",
-      "subtask": true
+    "orch-review": {
+      "description": "Run the orch-review native Workflow over a diff (local changes or a GitHub PR) and report blocking vs advisory findings. Surface for the orch-review workflow.",
+      "template": "{file:commands/orch-review.md}\n\n$ARGUMENTS"
     },
-    "build-fix": {
-      "description": "Fix build and TypeScript errors with minimal changes",
-      "template": "{file:commands/build-fix.md}\n\n$ARGUMENTS",
-      "agent": "build-error-resolver",
-      "subtask": true
+    "python-review": {
+      "description": "Comprehensive Python code review for PEP 8 compliance, type hints, security, and Pythonic idioms. Invokes the python-reviewer agent.",
+      "template": "{file:commands/python-review.md}\n\n$ARGUMENTS",
+      "agent": "python-reviewer",
+      "subagent": true
+    },
+    "multi-execute": {
+      "description": "Execute a multi-model implementation plan while preserving Claude as the only filesystem writer.",
+      "template": "{file:commands/multi-execute.md}\n\n$ARGUMENTS"
+    },
+    "kotlin-build": {
+      "description": "Fix Kotlin/Gradle build errors, compiler warnings, and dependency issues incrementally. Invokes the kotlin-build-resolver agent for minimal, surgical fixes.",
+      "template": "{file:commands/kotlin-build.md}\n\n$ARGUMENTS",
+      "agent": "kotlin-build-resolver",
+      "subagent": true
+    },
+    "prune": {
+      "description": "Delete pending instincts older than 30 days that were never promoted",
+      "template": "{file:commands/prune.md}\n\n$ARGUMENTS"
+    },
+    "multi-plan": {
+      "description": "Create a multi-model implementation plan without modifying production code.",
+      "template": "{file:commands/multi-plan.md}\n\n$ARGUMENTS"
+    },
+    "epic-review": {
+      "description": "Mark epic review requested, approved, or changes requested.",
+      "template": "{file:commands/epic-review.md}\n\n$ARGUMENTS"
+    },
+    "go-build": {
+      "description": "Fix Go build and vet errors",
+      "template": "{file:commands/go-build.md}\n\n$ARGUMENTS",
+      "agent": "go-build-resolver",
+      "subagent": true
     },
     "e2e": {
       "description": "Generate and run E2E tests with Playwright",
       "template": "{file:commands/e2e.md}\n\n$ARGUMENTS",
       "agent": "e2e-runner",
-      "subtask": true
+      "subagent": true
+    },
+    "orch-fix-defect": {
+      "description": "Orchestrate fixing a bug — reproduce it as a failing regression test, fix to green, review, gated commit. Wrapper for the orch-fix-defect skill.",
+      "template": "{file:commands/orch-fix-defect.md}\n\n$ARGUMENTS"
+    },
+    "hookify-list": {
+      "description": "List all configured hookify rules",
+      "template": "{file:commands/hookify-list.md}\n\n$ARGUMENTS"
+    },
+    "learn": {
+      "description": "Extract patterns and learnings from current session",
+      "template": "{file:commands/learn.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "cpp-test": {
+      "description": "Enforce TDD workflow for C++. Write GoogleTest tests first, then implement. Verify coverage with gcov/lcov.",
+      "template": "{file:commands/cpp-test.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subagent": true
+    },
+    "rust-test": {
+      "description": "Rust TDD workflow with unit and property tests",
+      "template": "{file:commands/rust-test.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subagent": true
+    },
+    "orch-refine-code": {
+      "description": "Orchestrate a behavior-preserving refactor — confirm tests green, restructure without changing behavior, keep green, review, gated commit. Wrapper for the orch-refine-code skill.",
+      "template": "{file:commands/orch-refine-code.md}\n\n$ARGUMENTS"
+    },
+    "security-scan": {
+      "description": "Run AgentShield against agent, hook, MCP, permission, and secret surfaces.",
+      "template": "{file:commands/security-scan.md}\n\n$ARGUMENTS",
+      "agent": "security-reviewer",
+      "subagent": true
+    },
+    "verify": {
+      "description": "Run verification loop to validate implementation",
+      "template": "{file:commands/verify.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "react-review": {
+      "description": "Comprehensive React/JSX code review for hook correctness, render performance, server/client component boundaries, accessibility, and React-specific security. Invokes the react-reviewer agent (and typescript-reviewer alongside on TSX/JSX changes).",
+      "template": "{file:commands/react-review.md}\n\n$ARGUMENTS",
+      "agent": "react-reviewer",
+      "subagent": true
+    },
+    "prp-implement": {
+      "description": "Execute an implementation plan with rigorous validation loops",
+      "template": "{file:commands/prp-implement.md}\n\n$ARGUMENTS"
+    },
+    "update-codemaps": {
+      "description": "Update codemaps for codebase navigation",
+      "template": "{file:commands/update-codemaps.md}\n\n$ARGUMENTS",
+      "agent": "doc-updater",
+      "subagent": true
+    },
+    "santa-loop": {
+      "description": "Adversarial dual-review convergence loop — two independent model reviewers must both approve before code ships.",
+      "template": "{file:commands/santa-loop.md}\n\n$ARGUMENTS"
+    },
+    "build-fix": {
+      "description": "Fix build and TypeScript errors with minimal changes",
+      "template": "{file:commands/build-fix.md}\n\n$ARGUMENTS",
+      "agent": "build-error-resolver",
+      "subagent": true
+    },
+    "plan-canvas": {
+      "description": "Open a plan or HTML artifact in the browser Plan Canvas for annotate-and-approve review",
+      "template": "{file:commands/plan-canvas.md}\n\n$ARGUMENTS"
+    },
+    "update-docs": {
+      "description": "Update documentation for recent changes",
+      "template": "{file:commands/update-docs.md}\n\n$ARGUMENTS",
+      "agent": "doc-updater",
+      "subagent": true
+    },
+    "feature-dev": {
+      "description": "Guided feature development with codebase understanding and architecture focus",
+      "template": "{file:commands/feature-dev.md}\n\n$ARGUMENTS"
+    },
+    "multi-workflow": {
+      "description": "Run a full multi-model development workflow with research, planning, execution, optimization, and review.",
+      "template": "{file:commands/multi-workflow.md}\n\n$ARGUMENTS"
+    },
+    "auto-update": {
+      "description": "Pull the latest ECC repo changes and reinstall the current managed targets.",
+      "template": "{file:commands/auto-update.md}\n\n$ARGUMENTS"
     },
     "refactor-clean": {
       "description": "Remove dead code and consolidate duplicates",
       "template": "{file:commands/refactor-clean.md}\n\n$ARGUMENTS",
       "agent": "refactor-cleaner",
-      "subtask": true
+      "subagent": true
+    },
+    "setup-pm": {
+      "description": "Configure package manager preference",
+      "template": "{file:commands/setup-pm.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "review-pr": {
+      "description": "Comprehensive PR review using specialized agents",
+      "template": "{file:commands/review-pr.md}\n\n$ARGUMENTS"
+    },
+    "gan-design": {
+      "description": "Run a generator/evaluator design loop for frontend or visual work with bounded iterations and scoring.",
+      "template": "{file:commands/gan-design.md}\n\n$ARGUMENTS",
+      "agent": "gan-planner",
+      "subagent": true
+    },
+    "jira": {
+      "description": "Retrieve a Jira ticket, analyze requirements, update status, or add comments. Uses the jira-integration skill and MCP or REST API.",
+      "template": "{file:commands/jira.md}\n\n$ARGUMENTS"
+    },
+    "resume-session": {
+      "description": "Load the most recent session file from ~/.claude/session-data/ and resume work with full context from where the last session ended.",
+      "template": "{file:commands/resume-session.md}\n\n$ARGUMENTS"
+    },
+    "orch-add-feature": {
+      "description": "Orchestrate building a brand-new feature end to end — research, plan, TDD, review, gated commit. Wrapper that kicks off the orch-add-feature skill.",
+      "template": "{file:commands/orch-add-feature.md}\n\n$ARGUMENTS"
+    },
+    "hookify": {
+      "description": "Create hooks to prevent unwanted behaviors from conversation analysis or explicit instructions",
+      "template": "{file:commands/hookify.md}\n\n$ARGUMENTS"
+    },
+    "kotlin-test": {
+      "description": "Enforce TDD workflow for Kotlin. Write Kotest tests first, then implement. Verify 80%+ coverage with Kover.",
+      "template": "{file:commands/kotlin-test.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subagent": true
+    },
+    "tdd": {
+      "description": "Enforce TDD workflow with 80%+ coverage",
+      "template": "{file:commands/tdd.md}\n\n$ARGUMENTS",
+      "agent": "tdd-guide",
+      "subagent": true
+    },
+    "loop-status": {
+      "description": "Command loop-status",
+      "template": "{file:commands/loop-status.md}\n\n$ARGUMENTS"
+    },
+    "pr": {
+      "description": "Create a GitHub PR from current branch with unpushed commits — discovers templates, analyzes changes, pushes",
+      "template": "{file:commands/pr.md}\n\n$ARGUMENTS"
+    },
+    "go-review": {
+      "description": "Go code review for idiomatic patterns",
+      "template": "{file:commands/go-review.md}\n\n$ARGUMENTS",
+      "agent": "go-reviewer",
+      "subagent": true
+    },
+    "instinct-status": {
+      "description": "Show learned instincts (project + global) with confidence",
+      "template": "{file:commands/instinct-status.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "promote": {
+      "description": "Promote project instincts to global scope",
+      "template": "{file:commands/promote.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "prp-plan": {
+      "description": "Create comprehensive feature implementation plan with codebase analysis and pattern extraction",
+      "template": "{file:commands/prp-plan.md}\n\n$ARGUMENTS"
+    },
+    "evolve": {
+      "description": "Analyze instincts and suggest or generate evolved structures",
+      "template": "{file:commands/evolve.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "instinct-import": {
+      "description": "Import instincts from external sources",
+      "template": "{file:commands/instinct-import.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "multi-backend": {
+      "description": "Run a backend-focused multi-model workflow for APIs, algorithms, data, and business logic.",
+      "template": "{file:commands/multi-backend.md}\n\n$ARGUMENTS"
+    },
+    "hookify-configure": {
+      "description": "Enable or disable hookify rules interactively",
+      "template": "{file:commands/hookify-configure.md}\n\n$ARGUMENTS"
+    },
+    "flutter-review": {
+      "description": "Review Flutter/Dart code for idiomatic patterns, widget best practices, state management, performance, accessibility, and security. Invokes the flutter-reviewer agent.",
+      "template": "{file:commands/flutter-review.md}\n\n$ARGUMENTS",
+      "agent": "flutter-reviewer",
+      "subagent": true
+    },
+    "orch-change-feature": {
+      "description": "Orchestrate altering an existing, working feature to new desired behavior — update tests to the new spec, change impl, review, gated commit. Wrapper for the orch-change-feature skill.",
+      "template": "{file:commands/orch-change-feature.md}\n\n$ARGUMENTS"
+    },
+    "gradle-build": {
+      "description": "Fix Gradle build errors for Android and KMP projects",
+      "template": "{file:commands/gradle-build.md}\n\n$ARGUMENTS"
+    },
+    "code-review": {
+      "description": "Review code for quality, security, and maintainability",
+      "template": "{file:commands/code-review.md}\n\n$ARGUMENTS",
+      "agent": "code-reviewer",
+      "subagent": true
+    },
+    "loop-start": {
+      "description": "Command loop-start",
+      "template": "{file:commands/loop-start.md}\n\n$ARGUMENTS"
+    },
+    "epic-claim": {
+      "description": "Claim an epic issue, stamp coordination state, and sync local ownership.",
+      "template": "{file:commands/epic-claim.md}\n\n$ARGUMENTS"
+    },
+    "security": {
+      "description": "Run comprehensive security review",
+      "template": "{file:commands/security.md}\n\n$ARGUMENTS",
+      "agent": "security-reviewer",
+      "subagent": true
     },
     "orchestrate": {
       "description": "Orchestrate multiple agents for complex tasks",
       "template": "{file:commands/orchestrate.md}\n\n$ARGUMENTS",
       "agent": "planner",
-      "subtask": true
+      "subagent": true
     },
-    "learn": {
-      "description": "Extract patterns and learnings from session",
-      "template": "{file:commands/learn.md}\n\n$ARGUMENTS"
+    "plan-prd": {
+      "description": "Generate a lean, problem-first PRD and hand off to /plan for implementation planning.",
+      "template": "{file:commands/plan-prd.md}\n\n$ARGUMENTS"
     },
-    "checkpoint": {
-      "description": "Save verification state and progress",
-      "template": "{file:commands/checkpoint.md}\n\n$ARGUMENTS"
+    "prp-commit": {
+      "description": "Quick commit with natural language file targeting — describe what to commit in plain English",
+      "template": "{file:commands/prp-commit.md}\n\n$ARGUMENTS"
     },
-    "verify": {
-      "description": "Run verification loop",
-      "template": "{file:commands/verify.md}\n\n$ARGUMENTS"
+    "epic-unblock": {
+      "description": "Sweep blocked epic issues and reopen anything whose dependencies are closed.",
+      "template": "{file:commands/epic-unblock.md}\n\n$ARGUMENTS"
     },
-    "eval": {
-      "description": "Run evaluation against criteria",
-      "template": "{file:commands/eval.md}\n\n$ARGUMENTS"
+    "multi-frontend": {
+      "description": "Run a frontend-focused multi-model workflow for components, layouts, animation, and UI polish.",
+      "template": "{file:commands/multi-frontend.md}\n\n$ARGUMENTS"
     },
-    "update-docs": {
-      "description": "Update documentation",
-      "template": "{file:commands/update-docs.md}\n\n$ARGUMENTS",
-      "agent": "doc-updater",
-      "subtask": true
+    "project-init": {
+      "description": "Detect a project's stack and produce a dry-run ECC onboarding plan using the repository's install manifests and stack mappings.",
+      "template": "{file:commands/project-init.md}\n\n$ARGUMENTS"
     },
-    "update-codemaps": {
-      "description": "Update codemaps",
-      "template": "{file:commands/update-codemaps.md}\n\n$ARGUMENTS",
-      "agent": "doc-updater",
-      "subtask": true
-    },
-    "test-coverage": {
-      "description": "Analyze test coverage",
-      "template": "{file:commands/test-coverage.md}\n\n$ARGUMENTS",
-      "agent": "tdd-guide",
-      "subtask": true
-    },
-    "setup-pm": {
-      "description": "Configure package manager",
-      "template": "{file:commands/setup-pm.md}\n\n$ARGUMENTS"
-    },
-    "go-review": {
-      "description": "Go code review",
-      "template": "{file:commands/go-review.md}\n\n$ARGUMENTS",
-      "agent": "go-reviewer",
-      "subtask": true
-    },
-    "go-test": {
-      "description": "Go TDD workflow",
-      "template": "{file:commands/go-test.md}\n\n$ARGUMENTS",
-      "agent": "tdd-guide",
-      "subtask": true
-    },
-    "go-build": {
-      "description": "Fix Go build errors",
-      "template": "{file:commands/go-build.md}\n\n$ARGUMENTS",
-      "agent": "go-build-resolver",
-      "subtask": true
-    },
-    "skill-create": {
-      "description": "Generate skills from git history",
-      "template": "{file:commands/skill-create.md}\n\n$ARGUMENTS"
-    },
-    "instinct-status": {
-      "description": "View learned instincts",
-      "template": "{file:commands/instinct-status.md}\n\n$ARGUMENTS"
-    },
-    "instinct-import": {
-      "description": "Import instincts",
-      "template": "{file:commands/instinct-import.md}\n\n$ARGUMENTS"
-    },
-    "instinct-export": {
-      "description": "Export instincts",
-      "template": "{file:commands/instinct-export.md}\n\n$ARGUMENTS"
-    },
-    "evolve": {
-      "description": "Cluster instincts into skills",
-      "template": "{file:commands/evolve.md}\n\n$ARGUMENTS"
-    },
-    "promote": {
-      "description": "Promote project instincts to global scope",
-      "template": "{file:commands/promote.md}\n\n$ARGUMENTS"
+    "pm2": {
+      "description": "Analyze a project and generate PM2 service commands for detected frontend, backend, or database services.",
+      "template": "{file:commands/pm2.md}\n\n$ARGUMENTS"
     },
     "projects": {
-      "description": "List known projects and instinct stats",
-      "template": "{file:commands/projects.md}\n\n$ARGUMENTS"
+      "description": "List registered projects and instinct counts",
+      "template": "{file:commands/projects.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "cpp-review": {
+      "description": "Comprehensive C++ code review for memory safety, modern C++ idioms, concurrency, and security. Invokes the cpp-reviewer agent.",
+      "template": "{file:commands/cpp-review.md}\n\n$ARGUMENTS",
+      "agent": "cpp-reviewer",
+      "subagent": true
+    },
+    "eval": {
+      "description": "Run evaluation against acceptance criteria",
+      "template": "{file:commands/eval.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "instinct-export": {
+      "description": "Export instincts for sharing",
+      "template": "{file:commands/instinct-export.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "marketing-campaign": {
+      "description": "Plan and execute a full marketing campaign. Accepts a product brief and returns positioning, landing page copy, email sequence, social posts, ad variants, video scripts, and a content calendar. Can also review existing copy for conversion quality.",
+      "template": "{file:commands/marketing-campaign.md}\n\n$ARGUMENTS",
+      "agent": "marketing-agent",
+      "subagent": true
+    },
+    "kotlin-review": {
+      "description": "Comprehensive Kotlin code review for idiomatic patterns, null safety, coroutine safety, and security. Invokes the kotlin-reviewer agent.",
+      "template": "{file:commands/kotlin-review.md}\n\n$ARGUMENTS",
+      "agent": "kotlin-reviewer",
+      "subagent": true
+    },
+    "checkpoint": {
+      "description": "Save verification state and progress checkpoint",
+      "template": "{file:commands/checkpoint.md}\n\n$ARGUMENTS",
+      "agent": "build"
+    },
+    "gan-build": {
+      "description": "Run a generator/evaluator build loop for implementation tasks with bounded iterations and scoring.",
+      "template": "{file:commands/gan-build.md}\n\n$ARGUMENTS",
+      "agent": "gan-generator",
+      "subagent": true
+    },
+    "ecc-guide": {
+      "description": "Navigate ECC's current agents, skills, commands, hooks, install profiles, and docs from the live repository surface.",
+      "template": "{file:commands/ecc-guide.md}\n\n$ARGUMENTS"
+    },
+    "orch-build-mvp": {
+      "description": "Orchestrate bootstrapping a working MVP from a design/spec doc — ingest, slice, scaffold, TDD, review, gated commit (reuses the GAN harness). Wrapper for the orch-build-mvp skill.",
+      "template": "{file:commands/orch-build-mvp.md}\n\n$ARGUMENTS"
+    },
+    "fastapi-review": {
+      "description": "Review a FastAPI application for architecture, async correctness, dependency injection, Pydantic schemas, security, performance, and testability.",
+      "template": "{file:commands/fastapi-review.md}\n\n$ARGUMENTS",
+      "agent": "fastapi-reviewer",
+      "subagent": true
+    },
+    "epic-publish": {
+      "description": "Publish a validated epic update back to the issue and local cache.",
+      "template": "{file:commands/epic-publish.md}\n\n$ARGUMENTS"
+    },
+    "rust-review": {
+      "description": "Rust code review for ownership, safety, and idiomatic patterns",
+      "template": "{file:commands/rust-review.md}\n\n$ARGUMENTS",
+      "agent": "rust-reviewer",
+      "subagent": true
     }
-  },
-  "permission": {
-    "mcp_*": "ask"
   }
 }

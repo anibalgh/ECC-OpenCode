@@ -1,7 +1,7 @@
 ---
 description: Run AgentShield against agent, hook, MCP, permission, and secret surfaces.
 agent: security-reviewer
-subtask: true
+subagent: true
 ---
 
 # Security Scan Command

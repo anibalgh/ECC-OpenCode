@@ -1,7 +1,7 @@
 ---
 description: Enforce TDD workflow with 80%+ coverage
 agent: tdd-guide
-subtask: true
+subagent: true
 ---
 
 # TDD Command

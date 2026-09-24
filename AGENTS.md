@@ -1,174 +1,146 @@
-# Everything Claude Code (ECC) — Agent Instructions
+# OpenCode ECC — Agent Instructions & Workflow Operating System
 
-This is a **production-ready AI coding plugin** providing 68 specialized agents, 292 skills, 94 commands, and automated hook workflows for software development.
+This is a **production-ready AI coding system** specialized for the **OpenCode** harness and powered by **Bun**, providing 68 specialized subagents, 292 skills, 100 commands, custom plugin hooks, and automated workflows for software engineering.
 
-**Version:** 2.2.2
+**Harness:** OpenCode (v1.18+ and v2.x compatible)  
+**Runtime & Package Manager:** Bun (v1.4+)  
+**Version:** 1.0.0
+
+---
 
 ## Core Principles
 
-1. **Agent-First** — Delegate to specialized agents for domain tasks
-2. **Test-Driven** — Write tests before implementation, 80%+ coverage required
-3. **Security-First** — Never compromise on security; validate all inputs
-4. **Immutability** — Always create new objects, never mutate existing ones
-5. **Plan Before Execute** — Plan complex features before writing code
+1. **Agent-First** — Delegate to specialized subagents for domain tasks via the `subagent` tool or `@<agent>` mention.
+2. **Test-Driven (TDD)** — Write failing tests before implementation; 80%+ coverage required.
+3. **Security-First** — Never compromise on security; validate all inputs, parameters, and boundary conditions.
+4. **Immutability** — Always create new objects, never mutate existing state.
+5. **Plan Before Execute** — Plan complex features, assess risks, and confirm steps before touching code.
 
-## Available Agents
+---
+
+## OpenCode Agent Architecture
+
+OpenCode operates with a primary agent and on-demand subagents:
+
+- **Primary Agent (`build`)**: The active development agent handling conversations, file editing, terminal commands, and subagent delegation.
+- **Planning Agent (`plan`)**: Explores and drafts plans without directly modifying production code.
+- **Specialized Subagents (`subagent` mode)**: Independent child sessions executed via OpenCode's `subagent` tool with dedicated prompts and constrained permissions.
+
+### Available Agents
 
 | Agent | Purpose | When to Use |
 |-------|---------|-------------|
-| planner | Implementation planning | Complex features, refactoring |
-| architect | System design and scalability | Architectural decisions |
-| tdd-guide | Test-driven development | New features, bug fixes |
-| code-reviewer | Code quality and maintainability | After writing/modifying code |
-| security-reviewer | Vulnerability detection | Before commits, sensitive code |
-| spec-miner | Brownfield spec extraction | Onboarding brownfield projects to spec-driven development |
-| build-error-resolver | Fix build/type errors | When build fails |
-| e2e-runner | End-to-end Playwright testing | Critical user flows |
-| refactor-cleaner | Dead code cleanup | Code maintenance |
-| doc-updater | Documentation and codemaps | Updating docs |
-| cpp-reviewer | C/C++ code review | C and C++ projects |
-| cpp-build-resolver | C/C++ build errors | C and C++ build failures |
-| fsharp-reviewer | F# functional code review | F# projects |
-| docs-lookup | Documentation lookup via Context7 | API/docs questions |
-| go-reviewer | Go code review | Go projects |
-| go-build-resolver | Go build errors | Go build failures |
-| kotlin-reviewer | Kotlin code review | Kotlin/Android/KMP projects |
-| kotlin-build-resolver | Kotlin/Gradle build errors | Kotlin build failures |
-| database-reviewer | PostgreSQL/Supabase specialist | Schema design, query optimization |
-| python-reviewer | Python code review | Python projects |
-| django-reviewer | Django code review | Django apps, DRF APIs, ORM, migrations |
-| django-build-resolver | Django build, migration, and setup errors | Django startup, dependency, migration, collectstatic failures |
-| java-reviewer | Java and Spring Boot code review | Java/Spring Boot projects |
-| java-build-resolver | Java/Maven/Gradle build errors | Java build failures |
-| loop-operator | Autonomous loop execution | Run loops safely, monitor stalls, intervene |
-| harness-optimizer | Harness config tuning | Reliability, cost, throughput |
-| rust-reviewer | Rust code review | Rust projects |
-| rust-build-resolver | Rust build errors | Rust build failures |
-| pytorch-build-resolver | PyTorch runtime/CUDA/training errors | PyTorch build/training failures |
-| mle-reviewer | Production ML pipeline review | ML pipelines, evals, serving, monitoring, rollback |
-| rag-pipeline-reviewer | RAG pipeline review | Retrieval quality, chunking, reranking, RAGAS evaluation coverage |
-| typescript-reviewer | TypeScript/JavaScript code review | TypeScript/JavaScript projects |
+| `planner` | Implementation planning | Complex features, refactoring, risk analysis |
+| `architect` | System design and scalability | Architectural decisions, API contracts |
+| `tdd-guide` | Test-driven development | New features, bug fixes, test coverage |
+| `code-reviewer` | Code quality and maintainability | After writing or modifying code |
+| `security-reviewer` | Vulnerability detection | Before commits, auth, sensitive data |
+| `build-error-resolver` | Fix build and type errors | When build fails or types break |
+| `e2e-runner` | End-to-end testing with Playwright | Critical user flows, browser regression |
+| `refactor-cleaner` | Dead code cleanup & consolidation | Code maintenance, deprecation removal |
+| `doc-updater` | Documentation & codemaps | Syncing docs, architecture codemaps |
+| `database-reviewer` | PostgreSQL & schema optimization | Schema changes, indexes, query plans |
+| `docs-lookup` | Up-to-date documentation lookup | Framework/library API questions |
+| `harness-optimizer` | Harness config tuning | Reliability, cost, and token optimization |
+| `loop-operator` | Autonomous loop execution | Running multi-step loops safely |
+| `spec-miner` | Brownfield spec extraction | Reverse-engineering specs from existing code |
+| `python-reviewer` | Python code review | Pythonic patterns, PEP 8, typing |
+| `django-reviewer` | Django & DRF code review | Django ORM, migrations, views, signals |
+| `django-build-resolver` | Django setup & migration errors | Migration conflicts, manage.py errors |
+| `go-reviewer` | Go code review | Concurrency, interfaces, idioms |
+| `go-build-resolver` | Go build & compilation errors | Go compiler, vet, module fixes |
+| `rust-reviewer` | Rust code review | Ownership, lifetimes, concurrency |
+| `rust-build-resolver` | Rust build errors | Cargo, borrow checker, compilation fixes |
+| `java-reviewer` | Java & Spring Boot review | Spring patterns, JPA, concurrency |
+| `java-build-resolver` | Java/Maven/Gradle build errors | Compilation and dependency issues |
+| `kotlin-reviewer` | Kotlin/Android/KMP review | Coroutines, Compose, idiomatic Kotlin |
+| `kotlin-build-resolver` | Kotlin build errors | Gradle and Kotlin compiler errors |
+| `cpp-reviewer` | C/C++ code review | Memory safety, modern idioms, templates |
+| `cpp-build-resolver` | C/C++ build errors | CMake, compiler, and linker errors |
+| `mle-reviewer` | Production ML pipeline review | ML pipelines, evals, monitoring, rollback |
+| `rag-pipeline-reviewer` | RAG pipeline review | Chunking, embeddings, reranking, evals |
+| `typescript-reviewer` | TypeScript/JavaScript review | Strict typing, async patterns, module design |
 
-## Agent Orchestration
+---
 
-Use agents proactively without user prompt:
-- Complex feature requests → **ecc:planner**
-- Code just written/modified → **ecc:code-reviewer**
-- Bug fix or new feature → **ecc:tdd-guide**
-- Architectural decision → **ecc:architect**
-- Security-sensitive code → **ecc:security-reviewer**
-- Brownfield project onboarding → **ecc:spec-miner**
-- Autonomous loops / loop monitoring → **ecc:loop-operator**
-- Harness config reliability and cost → **ecc:harness-optimizer**
-- RAG/retrieval pipeline changes → **ecc:rag-pipeline-reviewer**
+## Agent Orchestration in OpenCode
 
-Use parallel execution for independent operations — launch multiple agents simultaneously.
+Use subagents proactively when encountering specific tasks:
+
+- Complex feature requests → `@planner` (or `/plan`)
+- Code just written or modified → `@code-reviewer` (or `/code-review`)
+- Bug fix or new feature → `@tdd-guide` (or `/tdd`)
+- Architectural decision → `@architect`
+- Security-sensitive code → `@security-reviewer` (or `/security`)
+- Build failure or type error → `@build-error-resolver` (or `/build-fix`)
+- E2E testing flows → `@e2e-runner` (or `/e2e`)
+- Dead code / messy diffs → `@refactor-cleaner` (or `/refactor-clean`)
+- ML / RAG pipeline changes → `@mle-reviewer` / `@rag-pipeline-reviewer`
+
+In OpenCode, delegate using the `subagent` tool:
+```json
+{
+  "agent": "code-reviewer",
+  "description": "Review staged changes for security and quality",
+  "prompt": "Review all staged changes in git diff --staged"
+}
+```
+
+---
+
+## Skills Integration
+
+OpenCode natively loads skills dynamically via the `skill` tool. There are **292 skills** in `skills/`.
+When a task involves a specific domain, load the corresponding skill:
+
+- REST API design → `skill: { id: "api-design" }`
+- Backend development → `skill: { id: "backend-patterns" }`
+- Frontend development → `skill: { id: "frontend-patterns" }`
+- Security audit → `skill: { id: "security-review" }`
+- Verification loop → `skill: { id: "verification-loop" }`
+- Playwright E2E → `skill: { id: "e2e-testing" }`
+
+Do not load full skill files manually into context when not needed; rely on OpenCode's on-demand skill advertising.
+
+---
 
 ## Security Guidelines
 
 **Before ANY commit:**
-- No hardcoded secrets (API keys, passwords, tokens)
-- All user inputs validated
-- SQL injection prevention (parameterized queries)
-- XSS prevention (sanitized HTML)
-- CSRF protection enabled
-- Authentication/authorization verified
-- Rate limiting on all endpoints
-- Error messages don't leak sensitive data
+1. **Zero Hardcoded Secrets**: No API keys, passwords, bearer tokens, or sensitive credentials.
+2. **Input Validation**: All external inputs must be validated with schemas (Zod, Pydantic, etc.).
+3. **Injection Prevention**: Parameterized database queries, sanitized shell executions, safe HTML handling.
+4. **Least Privilege**: Only request required permissions and files.
+5. **No Credential Leaks**: Never log secrets, authorization headers, or private user data.
 
-**Secret management:** NEVER hardcode secrets. Use environment variables or a secret manager. Validate required secrets at startup. Rotate any exposed secrets immediately.
+---
 
-**If security issue found:** STOP → use security-reviewer agent → fix CRITICAL issues → rotate exposed secrets → review codebase for similar issues.
+## Coding Style & Standards
 
-## Coding Style
+- **Immutability**: Always return new copies of objects/arrays with changes applied (`{ ...obj, prop: value }`), never mutate.
+- **Focused Files**: 200–400 lines typical, 800 maximum. High cohesion, low coupling.
+- **Small Functions**: Keep functions under 50 lines with single responsibility.
+- **Error Handling**: Handle errors explicitly at every level; never swallow exceptions silently.
+- **Types**: Strict type checking; avoid `any` in TypeScript or unannotated signatures in Python.
 
-**Immutability (CRITICAL):** Always create new objects, never mutate. Return new copies with changes applied.
+---
 
-**File organization:** Many small files over few large ones. 200-400 lines typical, 800 max. Organize by feature/domain, not by type. High cohesion, low coupling.
-
-**Error handling:** Handle errors at every level. Provide user-friendly messages in UI code. Log detailed context server-side. Never silently swallow errors.
-
-**Input validation:** Validate all user input at system boundaries. Use schema-based validation. Fail fast with clear messages. Never trust external data.
-
-**Code quality checklist:**
-- Functions small (<50 lines), files focused (<800 lines)
-- No deep nesting (>4 levels)
-- Proper error handling, no hardcoded values
-- Readable, well-named identifiers
-
-## Testing Requirements
+## Testing Requirements (Mandatory)
 
 **Minimum coverage: 80%**
 
-Test types (all required):
-1. **Unit tests** — Individual functions, utilities, components
-2. **Integration tests** — API endpoints, database operations
-3. **E2E tests** — Critical user flows
+- **Unit tests**: Individual functions, pure utilities, domain entities.
+- **Integration tests**: API endpoints, database queries, inter-service calls.
+- **E2E tests**: Critical user journeys using Playwright.
 
-**TDD workflow (mandatory):**
-1. Write test first (RED) — test should FAIL
-2. Write minimal implementation (GREEN) — test should PASS
-3. Refactor (IMPROVE) — verify coverage 80%+
+**TDD Workflow:**
+1. **RED**: Write the test first and verify it fails.
+2. **GREEN**: Write the minimal code to make the test pass.
+3. **IMPROVE**: Refactor for clarity and performance while maintaining passing tests.
 
-Troubleshoot failures: check test isolation → verify mocks → fix implementation (not tests, unless tests are wrong).
-
-## Development Workflow
-
-1. **Plan** — Use ecc:planner agent, identify dependencies and risks, break into phases
-2. **TDD** — Use ecc:tdd-guide agent, write tests first, implement, refactor
-3. **Review** — Use ecc:code-reviewer agent immediately, address CRITICAL/HIGH issues
-4. **Capture knowledge in the right place**
-   - Personal debugging notes, preferences, and temporary context → auto memory
-   - Team/project knowledge (architecture decisions, API changes, runbooks) → the project's existing docs structure
-   - If the current task already produces the relevant docs or code comments, do not duplicate the same information elsewhere
-   - If there is no obvious project doc location, ask before creating a new top-level file
-5. **Commit** — Conventional commits format, comprehensive PR summaries
-
-## Workflow Surface Policy
-
-- `skills/` is the canonical workflow surface.
-- New workflow contributions should land in `skills/` first.
-- `commands/` is a legacy slash-entry compatibility surface and should only be added or updated when a shim is still required for migration or cross-harness parity.
+---
 
 ## Git Workflow
 
-**Commit format:** `<type>: <description>` — Types: feat, fix, refactor, docs, test, chore, perf, ci
-
-**PR workflow:** Analyze full commit history → draft comprehensive summary → include test plan → push with `-u` flag.
-
-## Architecture Patterns
-
-**API response format:** Consistent envelope with success indicator, data payload, error message, and pagination metadata.
-
-**Repository pattern:** Encapsulate data access behind standard interface (findAll, findById, create, update, delete). Business logic depends on abstract interface, not storage mechanism.
-
-**Skeleton projects:** Search for battle-tested templates, evaluate with parallel agents (security, extensibility, relevance), clone best match, iterate within proven structure.
-
-## Performance
-
-**Context management:** Avoid last 20% of context window for large refactoring and multi-file features. Lower-sensitivity tasks (single edits, docs, simple fixes) tolerate higher utilization.
-
-**Build troubleshooting:** Use build-error-resolver agent → analyze errors → fix incrementally → verify after each fix.
-
-## Project Structure
-
-```
-agents/          — 68 specialized subagents
-skills/          — 292 workflow skills and domain knowledge
-commands/        — 94 slash commands
-hooks/           — Trigger-based automations
-rules/           — Always-follow guidelines (common + per-language)
-scripts/         — Cross-platform Node.js utilities
-mcp-configs/     — 14 MCP server configurations
-tests/           — Test suite
-```
-
-`commands/` remains in the repo for compatibility, but the long-term direction is skills-first.
-
-## Success Metrics
-
-- All tests pass with 80%+ coverage
-- No security vulnerabilities
-- Code is readable and maintainable
-- Performance is acceptable
-- User requirements are met
+- **Commit Format**: `<type>: <description>` (e.g. `feat: add user auth`, `fix: handle null pointer in parser`, `test: add coverage for billing`).
+- **Review before Push**: Run `@code-reviewer` and verify that `git diff` contains no debug logs or formatting inconsistencies.

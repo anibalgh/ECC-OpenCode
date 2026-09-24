@@ -1,5 +1,7 @@
 ---
 description: Run a deterministic repository harness audit and return a prioritized scorecard.
+agent: harness-optimizer
+subagent: true
 ---
 
 # Harness Audit Command

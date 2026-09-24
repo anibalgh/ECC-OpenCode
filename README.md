@@ -1,223 +1,174 @@
 <p align="center">
-  <img src="assets/hero.png" alt="ECC - the agent harness operating system" width="100%" />
+  <img src="assets/hero.png" alt="ECC-OpenCode - the agent harness operating system" width="100%" />
 </p>
 
 <p align="center">
-  <a href="https://www.star-history.com/affaan-m/ecc">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/badge?repo=affaan-m/ECC&type=trending&theme=dark" />
-      <img src="https://api.star-history.com/badge?repo=affaan-m/ECC&type=trending" alt="GitHub Trending Repository of the Day" height="46" />
-    </picture>
-  </a>
-  <a href="https://www.star-history.com/affaan-m/ecc">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/badge?repo=affaan-m/ECC&type=rank&theme=dark" />
-      <img src="https://api.star-history.com/badge?repo=affaan-m/ECC&type=rank" alt="Star History Global Rank" height="46" />
-    </picture>
-  </a>
-</p>
-
-<p align="center">
-  <strong>Language:</strong>
-  <a href="README.md">English</a> |
-  <a href="docs/pt-BR/README.md">Português (Brasil)</a> |
-  <a href="README.zh-CN.md">简体中文</a> |
-  <a href="docs/zh-TW/README.md">繁體中文</a> |
-  <a href="docs/ja-JP/README.md">日本語</a> |
-  <a href="docs/ko-KR/README.md">한국어</a> |
-  <a href="docs/tr/README.md">Türkçe</a> |
-  <a href="docs/ru/README.md">Русский</a> |
-  <a href="docs/vi-VN/README.md">Tiếng Việt</a> |
-  <a href="docs/th/README.md">ไทย</a> |
-  <a href="docs/de-DE/README.md">Deutsch</a> |
-  <a href="docs/es/README.md">Español</a> |
-  <a href="docs/uk-UA/README.md">Українська</a>
-</p>
-
-<p align="center">
-  <a href="https://discord.gg/36yGMHGFbR"><img src="https://img.shields.io/discord/1496644400590094540?logo=discord&logoColor=white&label=Discord&color=5865F2" alt="Discord" /></a>
-  <a href="https://ecc.tools"><img src="https://img.shields.io/badge/Website-ecc.tools-E07856?logo=googlechrome&logoColor=white" alt="Website" /></a>
-  <a href="https://github.com/apps/ecc-tools"><img src="https://img.shields.io/badge/GitHub%20App-ECC%20Tools-181717?logo=github&logoColor=white" alt="GitHub App" /></a>
+  <img src="https://img.shields.io/badge/Version-1.0.0-blue.svg" alt="Version 1.0.0" />
+  <img src="https://img.shields.io/badge/Harness-OpenCode-black?logo=terminal&logoColor=white" alt="OpenCode" />
+  <img src="https://img.shields.io/badge/Runtime-Bun%201.4+-fbf0df?logo=bun&logoColor=black" alt="Bun" />
+  <img src="https://img.shields.io/badge/Subagents-68-green.svg" alt="68 Subagents" />
+  <img src="https://img.shields.io/badge/Commands-100-purple.svg" alt="100 Commands" />
+  <img src="https://img.shields.io/badge/Skills-292-orange.svg" alt="292 Skills" />
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT license" /></a>
 </p>
 
-<p align="center">
-  <a href="https://github.com/affaan-m/ECC"><img src="https://img.shields.io/github/stars/affaan-m/ECC?style=flat" alt="GitHub stars" /></a>
-  <a href="https://github.com/affaan-m/ECC/forks"><img src="https://img.shields.io/github/forks/affaan-m/ECC?style=flat" alt="GitHub forks" /></a>
-  <a href="https://github.com/affaan-m/ECC/graphs/contributors"><img src="https://img.shields.io/github/contributors/affaan-m/ECC?style=flat" alt="Contributors" /></a>
-  <a href="https://github.com/marketplace/ecc-tools"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.ecc.tools%2Fbadge%2Finstalls&logo=github" alt="GitHub App installs" /></a>
-</p>
+---
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/ecc-universal"><img src="https://img.shields.io/npm/dw/ecc-universal?label=ecc-universal&logo=npm" alt="ecc-universal npm downloads" /></a>
-  <a href="https://www.npmjs.com/package/ecc-agentshield"><img src="https://img.shields.io/npm/dw/ecc-agentshield?label=ecc-agentshield&logo=npm" alt="ecc-agentshield npm downloads" /></a>
-</p>
+# ECC-OpenCode (v1.0.0)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/-Shell-4EAA25?logo=gnu-bash&logoColor=white" alt="Shell" />
-  <img src="https://img.shields.io/badge/-TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/-Go-00ADD8?logo=go&logoColor=white" alt="Go" />
-  <img src="https://img.shields.io/badge/-Java-ED8B00?logo=openjdk&logoColor=white" alt="Java" />
-  <img src="https://img.shields.io/badge/-Perl-39457E?logo=perl&logoColor=white" alt="Perl" />
-  <img src="https://img.shields.io/badge/-Markdown-000000?logo=markdown&logoColor=white" alt="Markdown" />
-</p>
+> **Production-ready AI coding operating system specialized for the [OpenCode](https://opencode.ai) harness and powered by [Bun](https://bun.sh).**
 
-> [!WARNING]
-> **Official sources only.** Install ECC only from verified channels: the GitHub repository [github.com/affaan-m/ECC](https://github.com/affaan-m/ECC), the npm packages [`ecc-universal`](https://www.npmjs.com/package/ecc-universal) and [`ecc-agentshield`](https://www.npmjs.com/package/ecc-agentshield), the [GitHub App](https://github.com/apps/ecc-tools), the plugin slug `ecc@ecc`, and the project website [ecc.tools](https://ecc.tools). Third-party re-uploads and unofficial mirrors are not maintained or reviewed by the project and may contain malware.
-
-## Install with Claude Code
-
-Use the [guided setup](#install-ecc) or [native plugin commands](#claude-code-details). Both install the same `ecc@ecc` plugin. Choose one and do not stack a full manual Claude install on top.
-
-<div align="center">
-
-<table aria-label="ECC primary links">
-<tr>
-<td width="33%" align="center">
-  <a href="https://ecc.tools/pricing">
-    <img src="assets/images/community/ecc-tools-mark.svg" height="42" alt="ECC Tools" /><br />
-    <strong>ECC Pro + GitHub App</strong>
-  </a><br />
-  <sub><a href="https://github.com/apps/ecc-tools">Install free</a> · <a href="https://ecc.tools/pricing">Private repos from $19/seat/mo</a></sub>
-</td>
-<td width="33%" align="center">
-  <a href="https://github.com/sponsors/affaan-m">
-    <img src="assets/images/community/heart.svg" height="42" alt="" /><br />
-    <strong>Sponsor ECC</strong>
-  </a><br />
-  <sub>Fund the open-source project</sub>
-</td>
-<td width="33%" align="center">
-  <a href="https://discord.gg/36yGMHGFbR">
-    <img src="assets/images/community/discord.svg" height="42" alt="Discord" /><br />
-    <strong>Community</strong>
-  </a><br />
-  <sub>Discord · Q&amp;A · Show and Tell</sub>
-</td>
-</tr>
-</table>
-
-</div>
-
-<sub>**OSS stays free.** This repo is MIT-licensed forever. ECC Pro is the hosted GitHub App for private repos. <a href="https://github.com/sponsors/affaan-m">Sponsors</a> and <a href="https://ecc.tools/pricing">Pro subscribers</a> fund the work. That's why a single maintainer ships weekly across 7 harnesses.</sub>
-
-<div align="center">
-
-<sub><strong>Partners &amp; sponsors</strong></sub>
-
-<p align="center" aria-label="Partners and sponsors">
-  <a href="https://www.coderabbit.ai" title="CodeRabbit"><img src="assets/images/sponsors/coderabbit.png" height="54" alt="CodeRabbit" /></a>&nbsp;&nbsp;&nbsp;
-  <a href="https://www.greptile.com/go/ecc" title="Greptile"><img src="assets/images/sponsors/greptile.png" height="54" alt="Greptile" /></a>&nbsp;&nbsp;&nbsp;
-  <a href="https://platform.kimi.ai?aff=ecc" title="Moonshot AI - Kimi"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/images/sponsors/moonshot-dark.png" /><img src="assets/images/sponsors/moonshot.png" width="132" alt="Moonshot AI - Kimi" /></picture></a>&nbsp;&nbsp;&nbsp;
-  <a href="https://compute.itomarkets.com" title="Itô Markets"><picture><source media="(prefers-color-scheme: light)" srcset="assets/images/sponsors/ito-transparent-light.png" /><img src="assets/images/sponsors/ito-transparent.png" width="96" alt="Itô Markets" /></picture></a>&nbsp;&nbsp;&nbsp;
-  <a href="https://serpapi.com/github-ecc" title="SerpApi: Web Search API"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/images/sponsors/serpapi-logo-dark-mode.svg" /><img src="assets/images/sponsors/serpapi-logo-light-mode.svg" width="200" alt="SerpApi: Web Search API" /></picture></a>
-</p>
-
-<sub><strong>Past sponsors:</strong> <a href="https://www.atlascloud.ai/?utm_source=github&amp;utm_medium=link&amp;utm_campaign=ECC">Atlas Cloud</a></sub>
-
-<sub><strong>Community sponsors:</strong> <a href="https://github.com/mikejmorgan-ai">Mike Morgan</a> · <a href="https://github.com/jasonwu513">@jasonwu513</a> · <a href="https://github.com/1anter">@1anter</a> · <a href="https://github.com/massimotodaro">@massimotodaro</a> · <a href="https://github.com/meadmccabe">@meadmccabe</a></sub>
-
-<sub><a href="https://github.com/sponsors/affaan-m"><strong>Become a Sponsor</strong></a> · <a href="SPONSORS.md">Sponsor Tiers</a> · <a href="SPONSORING.md">Sponsorship Program</a></sub>
-
-</div>
-
-<p align="center"><a href="#install-ecc">Jump to install ↓</a></p>
-
-# ECC
-
-Your agent can write code, but ECC gives it a coordinated engineering system and toolbox: it plans before it builds, verifies changes with tests, reviews its own work from a fresh context, remembers what matters, and turns repeated wins into reusable skills and workflows.
+**ECC-OpenCode** brings the full engineering discipline of Everything Claude Code directly into OpenCode: planning before coding, strict Test-Driven Development (TDD $\ge 80\%$), automated code & security reviews, build repair, 68 domain subagents, 100 slash commands, 292 skills, and 15+ event-driven plugin hooks.
 
 ```text
-plan -> test -> implement -> review -> verify -> remember -> improve
+plan ──> test (TDD) ──> implement ──> review ──> verify ──> remember ──> improve
 ```
 
-Instead of rebuilding that process in every prompt, you install it once and make it part of how your agent works.
+---
 
-> Optimize the context window. Persist everything else.
+## Prerequisites
 
-ECC is MIT-licensed open source. It works best with Claude Code today, has a supported Codex sync path, and provides capability-limited adapters for Cursor, OpenCode, Gemini, Zed, GitHub Copilot, Antigravity, Qwen, and other harnesses. See the [support status matrix](#platform-support) before assuming feature parity.
+Before starting, ensure you have **Bun** and **OpenCode CLI** installed:
 
-Access to 68 agents, 292 skills, and 94 legacy command shims, plus hooks, rules, memory, continuous learning, and AgentShield security scanning. The agents are specialized for planning, review, build repair, security, architecture, and domain work.
-
-| Included         |       Count | What it gives you                                                                    |
-| ---------------- | ----------: | ------------------------------------------------------------------------------------ |
-| Agents           |   68 agents | Planning, review, build repair, security, architecture, and domain work              |
-| Skills           |  292 skills | TDD, research, security, docs, frontend, data, ML, operations, and more              |
-| Commands         | 94 commands | Convenient entry points while ECC moves to a skills-first surface                    |
-| Hooks and memory |     Runtime | Enforcement, session summaries, continuous learning, instincts, and context controls |
-| Rules            |   Selective | Always-loaded standards you choose by language or project                            |
-| AgentShield      |    Included | Scanning for prompts, hooks, MCP config, permissions, secrets, and agent files       |
-
-<p align="center">
-  <a href="https://www.star-history.com/affaan-m/ecc">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=affaan-m/ECC&type=Date&theme=dark" />
-      <img src="https://api.star-history.com/svg?repos=affaan-m/ECC&type=Date" alt="Live star history chart for affaan-m/ECC" width="100%" />
-    </picture>
-  </a>
-</p>
-
-## Install ECC
-
-> [!IMPORTANT]
-> ECC 2.2 includes guided package setup for Claude Code, Codex, and Kimi Code.
-> The universal package requires Node.js 18 or newer. Claude plugin setup also
-> requires Git and Claude Code 2.1 or newer on `PATH`.
-
-### Recommended: universal guided setup
-
-For Claude Code plugin setup, updates, scope changes, and hook-profile changes:
-
-```bash
-npx ecc-universal@2.2.2 setup
-```
-
-#### Windows first-time walkthrough
-
-If you are new to command-line tools, use this copy-and-paste path:
-
-1. Install Node.js 18 or newer, Git, and Claude Code.
-2. Open **PowerShell** from the Windows Start menu.
-3. Confirm that each prerequisite is available:
-
-   ```powershell
-   node --version
-   git --version
-   claude --version
+1. **Bun** (v1.1+ or v1.4+ recommended):
+   ```bash
+   curl -fsSL https://bun.sh/install | bash
+   ```
+2. **OpenCode CLI** (v1.18+ or v2.x):
+   ```bash
+   # Install via Bun (recommended)
+   bun install -g --trust @opencode/cli
+   
+   # Or via curl
+   curl -fsSL https://opencode.ai/v2/install | bash
    ```
 
-4. Run the guided installer:
+---
 
-   ```powershell
-   npx ecc-universal@2.2.2 setup
-   ```
+## Installation & Quickstart
 
-5. For a typical personal setup, choose **Global user**, choose **Standard** hooks, and confirm.
-6. Start a new Claude Code session and run `/plugin list` to verify that `ecc@ecc` is enabled.
+### 1. Clone & Install Dependencies
 
-This path does not require cloning the repository. If any prerequisite command is not found, install or repair that prerequisite before rerunning ECC setup.
-
-If npm reports a version or cache error, confirm the registry version before retrying:
+Clone this repository and install dependencies in milliseconds using Bun:
 
 ```bash
-npm view ecc-universal version
+git clone git@github.com:anibalgh/ECC-OpenCode.git
+cd ECC-OpenCode
+bun install
 ```
 
-ECC 2.2 supports the same guided setup through modern package runners:
+### 2. Build the OpenCode Plugin
 
-| Package runner | Guided setup command |
-|---|---|
-| npm / npx | `npx ecc-universal@2.2.2 setup` |
-| pnpm | `pnpm dlx ecc-universal@2.2.2 setup` |
-| Yarn 2+ | `yarn dlx ecc-universal@2.2.2 setup` |
-| Bun | `bunx ecc-universal@2.2.2 setup` |
+Compile the OpenCode plugin hooks and custom tools:
 
-The examples select [the published ECC 2.2.2 release](https://www.npmjs.com/package/ecc-universal/v/2.2.2), matching this repository's release version. A version pin is not a security audit or an integrity check. Review the release source and registry integrity before running package code; use a reviewed checkout for unreleased changes.
+```bash
+bun run build:opencode
+```
 
-Yarn Classic 1 does not provide `yarn dlx`; use `npx`, install the package globally, or upgrade Yarn for a temporary one-shot run.
+### 3. Launch OpenCode
 
-The wizard inventories the official marketplace and every native Claude install scope before making changes, then installs, updates, or safely moves `ecc@ecc` to the scope you choose. Rerun the same command whenever you want to update ECC, change scope, or change its hook profile. This setup wizard currently configures the Claude Code plugin; use the multi-harness wizard below for Codex or Kimi Code.
+Start OpenCode in your preferred interface:
+
+```bash
+# Terminal TUI
+opencode
+
+# Web UI (pair mode)
+opencode pair
+
+# Desktop app
+opencode desktop
+```
+
+OpenCode automatically discovers and loads:
+- **Project Configuration**: `opencode.json` and `.opencode/opencode.json`
+- **Persistent Instructions**: `AGENTS.md`
+- **68 Subagents**: discovered directly from `.opencode/agents/*.md`
+- **100 Slash Commands**: discovered from `.opencode/commands/*.md`
+- **292 Agent Skills**: registered via `"skills": { "paths": ["./skills"] }` and loaded on demand
+- **Plugin Hooks & Tools**: `.opencode/plugins/` (precompiled in `.opencode/dist/`)
+
+> [!TIP]
+> **Existing Projects**: To integrate and use ECC-OpenCode with an existing project on your machine, see the complete step-by-step guide in [INSTALACION.md](INSTALACION.md).
+
+---
+
+## What is Included
+
+| Component | Count | Description |
+| :--- | :---: | :--- |
+| **Specialized Subagents** | **68** | Planning, architecture, TDD, code review, security, build error resolvers, and language specialists |
+| **Slash Commands** | **100** | Interactive shortcuts for `/plan`, `/tdd`, `/code-review`, `/security`, `/build-fix`, etc. |
+| **Agent Skills** | **292** | On-demand knowledge packs for APIs, frameworks, databases, and DevOps via the `skill` tool |
+| **Plugin Hooks** | **15+** | Lifecycle events for auto-formatting, type-checking, secret prevention, and context compaction |
+| **Custom Tools** | **8** | `changed-files`, `dependency-analyzer`, `run-tests`, `check-coverage`, `security-audit`, etc. |
+
+---
+
+## How to Use ECC-OpenCode
+
+### 1. Invocating Subagents (`@<agent>`)
+
+Delegate complex tasks to specialized agents directly in your prompt or with the `subagent` tool:
+
+- `@planner`: Create a step-by-step phased implementation plan before writing code.
+- `@tdd-guide`: Enforce test-driven development (RED $\rightarrow$ GREEN $\rightarrow$ REFACTOR) with 80%+ coverage.
+- `@code-reviewer`: Review recent git diffs for maintainability, immutability, and code style.
+- `@security-reviewer`: Audit authentication, input validation, and credential leaks.
+- `@build-error-resolver`: Fix build and type errors with minimal, focused diffs.
+- `@python-reviewer` / `@react-reviewer` / `@go-reviewer` / `@rust-reviewer`: Language-specific review.
+
+### 2. Using Slash Commands (`/<command>`)
+
+Type `/` in the OpenCode composer to view all 100 available commands:
+
+```text
+/plan "Implement user session management with JWT and Redis"
+/tdd "Add unit tests for payment processing module"
+/code-review
+/security
+/build-fix
+/e2e
+/refactor-clean
+/python-review
+```
+
+### 3. On-Demand Skills
+
+OpenCode automatically loads skills dynamically via the native `skill` tool:
+- When building APIs $\rightarrow$ loads `api-design`
+- When optimizing backend $\rightarrow$ loads `backend-patterns`
+- When writing E2E tests $\rightarrow$ loads `e2e-testing`
+- When performing security audits $\rightarrow$ loads `security-review`
+
+### 4. Any Model, Any Provider
+
+Unlike Claude Code, OpenCode is model-agnostic. You can connect and switch models at runtime:
+- **Anthropic**: Claude 3.7 Sonnet, Claude 3.5 Sonnet, Claude 3.5 Haiku
+- **OpenAI**: GPT-4o, o1, o3-mini
+- **Google**: Gemini 2.0 Flash / Pro
+- **Local & Open Models**: Ollama, DeepSeek R1, vLLM
+- Run `/connect` or `opencode providers` to configure your credentials.
+
+---
+
+## Development & Maintenance Scripts
+
+All scripts are powered by **Bun**:
+
+```bash
+# Rebuild OpenCode plugin payload
+bun run build:opencode
+
+# Run all test suites
+bun test
+
+# Validate OpenCode configuration
+bun tests/opencode-config.test.js
+
+# Verify plugin build output
+bun tests/scripts/build-opencode.test.js
+```
 
 To configure more than one coding agent in one reviewed flow, use the multi-harness wizard:
 

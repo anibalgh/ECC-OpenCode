@@ -100,10 +100,8 @@ ecc2/target/
 .opencode/package-lock.json
 .opencode/node_modules/
 
-# yarn is the canonical package manager for this repo (see package.json
-# "packageManager"); ignore stray lockfiles from running another manager locally
-/bun.lock
-/bun.lockb
+# bun is the canonical package manager for this repo
+yarn.lock
 assets/images/security/badrudi-exploit.mp4
 
 .aider*
